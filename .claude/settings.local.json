@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "symex-validator": {
+      "command": "./.venv/bin/python",
+      "args": [
+        "-m",
+        "symex_mcp.server"
+      ],
+      "env": {
+        "SYMEX_CONTAINER_CMD": "podman",
+        "SYMEX_KLEE_IMAGE": "docker.io/klee/klee:3.1",
+        "SYMEX_LOG": "INFO"
+      }
+    }
+  }
+}

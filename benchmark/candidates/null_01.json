@@ -1,0 +1,23 @@
+{
+  "source_file": "examples/toy/null_01.c",
+  "function_name": "read_magic",
+  "sink_line": 15,
+  "cwe": "CWE-476",
+  "rationale": "cfg is dereferenced without a NULL check. If the caller passes NULL, the access to cfg->magic traps.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "cfg",
+      "c_type": "cfg_t *",
+      "size_bytes": 0,
+      "is_pointer": true
+    },
+    {
+      "name": "fallback",
+      "c_type": "int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "timeout_s": 30
+}

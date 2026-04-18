@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+benchmark/results.csv
+scratch/
+*.bc
+*.ktest
+klee-out-*/
+.mypy_cache/
+.pytest_cache/

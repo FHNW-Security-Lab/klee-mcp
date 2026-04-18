@@ -1,0 +1,37 @@
+{
+  "source_file": "examples/real/png_check_fp_number.c",
+  "function_name": "png_check_fp_number",
+  "cwe": "CWE-125",
+  "rationale": "Sensitivity experiment \u2014 same target as libpng_check_fp_number but with use_bounds=false. This demonstrates that LLM bounds encode a CALLER CONTRACT: with size <= 4 (matching buffer size), the function is proven safe (infeasible); without the bound, KLEE shows the function trusts 'size' blindly and an over-reported size causes OOB read. Same code, opposite verdict \u2014 determined by whether the caller contract is modeled.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "string",
+      "c_type": "const char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "size",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    },
+    {
+      "name": "statep",
+      "c_type": "int *",
+      "size_bytes": 1,
+      "is_pointer": true
+    },
+    {
+      "name": "whereami",
+      "c_type": "size_t *",
+      "size_bytes": 1,
+      "is_pointer": true
+    }
+  ],
+  "use_bounds": false,
+  "auto_relax_on_infeasible": false,
+  "timeout_s": 60,
+  "expected_verdict": "confirmed"
+}

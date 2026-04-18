@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/toy/bof_01.c",
+  "function_name": "vulnerable_copy",
+  "sink_line": 10,
+  "cwe": "CWE-121",
+  "rationale": "Same bug as bof_01 but with LLM-supplied bounds. LLM guesses len <= 40 which still reaches the bug (len > 16 needed).",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 256,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "assumptions": [
+    "len >= 17"
+  ],
+  "loop_bounds": {
+    "len": 40
+  },
+  "use_bounds": true,
+  "auto_relax_on_infeasible": true,
+  "timeout_s": 30
+}

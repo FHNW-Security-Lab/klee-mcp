@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/real/whole_lib_push_read.c",
+  "function_name": "fuzz_push",
+  "cwe": "OTHER",
+  "rationale": "Whole-library push-mode harness. Creates real libpng read+info structs, then feeds a small symbolic buffer through png_process_data. Tests Phase-3b under realistic conditions: libpng's setjmp/longjmp error handling, zlib inflate paths, chunk dispatch. Expected: either timeout (path explosion, still valuable because KLEE reached the code) or a confirmed/infeasible verdict on the small buffer.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const unsigned char *",
+      "size_bytes": 8,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "len": 8
+  },
+  "use_bounds": true,
+  "extra_bitcodes": [
+    "realworld/bitcode/libpng.bc"
+  ],
+  "timeout_s": 180,
+  "max_memory_mb": 16000,
+  "expected_verdict": "infeasible"
+}

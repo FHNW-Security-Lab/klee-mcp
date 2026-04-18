@@ -1,0 +1,28 @@
+{
+  "source_file": "examples/toy/bof_01.c",
+  "function_name": "vulnerable_copy",
+  "sink_line": 10,
+  "cwe": "CWE-121",
+  "rationale": "Same bug as bof_01 but the LLM guessed len <= 10 which rules out the crashing input. Exercises auto-relax: bounded run infeasible, relaxed run confirmed, with a warning.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 256,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "len": 10
+  },
+  "use_bounds": true,
+  "auto_relax_on_infeasible": true,
+  "timeout_s": 30
+}

@@ -1,0 +1,20 @@
+{
+  "source_file": "examples/toy/dispatch_01.c",
+  "entry_function": "noop_path",
+  "target_function": "inner_sink",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 16,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "timeout_s": 20
+}

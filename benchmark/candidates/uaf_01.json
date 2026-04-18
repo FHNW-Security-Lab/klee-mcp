@@ -1,0 +1,23 @@
+{
+  "source_file": "examples/toy/uaf_01.c",
+  "function_name": "process_record",
+  "sink_line": 18,
+  "cwe": "CWE-416",
+  "rationale": "mode==0 path frees buf; if tag==0x42 subsequently, buf[0] is read after free.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "mode",
+      "c_type": "uint8_t",
+      "size_bytes": 1,
+      "is_pointer": false
+    },
+    {
+      "name": "tag",
+      "c_type": "uint8_t",
+      "size_bytes": 1,
+      "is_pointer": false
+    }
+  ],
+  "timeout_s": 60
+}

@@ -1,0 +1,5 @@
+mcp>=1.2.0
+pydantic>=2.6
+anyio>=4.3
+typer>=0.12
+rich>=13.7

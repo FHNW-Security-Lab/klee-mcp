@@ -1,0 +1,38 @@
+{
+  "source_file": "examples/real/whole_lib_format_number.c",
+  "function_name": "fuzz_format_number",
+  "cwe": "CWE-787",
+  "rationale": "png_format_number executes `*--end = '\\0'` before checking end > start. If the caller passes end == start (end_offset == 0 in our harness), the decrement-then-write lands at buf-1. This is a contract-violation OOB but KLEE should still surface it because our harness lets end_offset be symbolic.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "format",
+      "c_type": "int",
+      "size_bytes": 4,
+      "is_pointer": false
+    },
+    {
+      "name": "number",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    },
+    {
+      "name": "end_offset",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "end_offset": 16,
+    "number": 256,
+    "format": 8
+  },
+  "use_bounds": true,
+  "extra_bitcodes": [
+    "realworld/bitcode/libpng.bc"
+  ],
+  "timeout_s": 120,
+  "max_memory_mb": 16000
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vulnerability candidate (LLM output)",
+  "description": "Structured output the Claude Code vuln-finder skill emits per candidate. The symex-validator MCP consumes this shape directly.",
+  "type": "object",
+  "required": [
+    "source_file",
+    "function_name",
+    "cwe",
+    "rationale",
+    "tainted_inputs"
+  ],
+  "properties": {
+    "source_file": {
+      "type": "string",
+      "description": "Absolute path to the C/C++ source file."
+    },
+    "function_name": {
+      "type": "string",
+      "description": "Function containing the suspected sink; the symex harness will target this function."
+    },
+    "sink_line": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Line of the suspected dangerous operation (reporting only)."
+    },
+    "cwe": {
+      "type": "string",
+      "enum": [
+        "CWE-121", "CWE-122", "CWE-125", "CWE-190", "CWE-369",
+        "CWE-415", "CWE-416", "CWE-476", "CWE-787", "OTHER"
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Short explanation of why the LLM believes this is a bug. One to three sentences."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "tainted_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "c_type"],
+        "properties": {
+          "name": {"type": "string"},
+          "c_type": {"type": "string"},
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "For pointers: size of the backing buffer. 0 means 'pass NULL' (useful for CWE-476)."
+          },
+          "is_pointer": {"type": "boolean"},
+          "null_terminate": {"type": "boolean"}
+        }
+      }
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Informal constraints the caller would need to satisfy (e.g. 'len > 16'). Not fed to KLEE — KLEE discovers them — but useful for the report."
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Opt-in LLM bounds pasted verbatim into klee_assume(). Reference only tainted_inputs by name. Example: ['len <= 64', 'mode < 4']. Ignored unless use_bounds=true on the verify call."
+    },
+    "loop_bounds": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0},
+      "description": "Opt-in per-variable caps. {var: N} -> klee_assume(var <= N). Use when the LLM can bound a loop counter or a size field semantically (e.g. 'len is a packet length <= 1500'). Ignored unless use_bounds=true."
+    },
+    "use_bounds": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, assumptions and loop_bounds are applied on the first verify run. Recommended workflow: start with use_bounds=true for a fast tight run, and set auto_relax_on_infeasible=true so the server retries without bounds if needed."
+    },
+    "auto_relax_on_infeasible": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true and the bounded run is infeasible, server automatically retries once with use_bounds=false and returns the relaxed verdict."
+    },
+    "reachability": {
+      "type": "object",
+      "description": "Optional Phase-2 reachability query run after the bug is confirmed in the function. LLM-picked entry_function (a nearby exported API, not main) and target_function (usually the same as function_name).",
+      "properties": {
+        "entry_function": {"type": "string"},
+        "target_function": {"type": "string"},
+        "tainted_inputs": {"type": "array"},
+        "assumptions": {"type": "array", "items": {"type": "string"}},
+        "loop_bounds": {"type": "object"},
+        "use_bounds": {"type": "boolean"}
+      }
+    },
+    "extra_sources": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "include_dirs": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "defines": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "timeout_s": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 600,
+      "default": 60
+    }
+  }
+}

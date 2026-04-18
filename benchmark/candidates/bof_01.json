@@ -1,0 +1,27 @@
+{
+  "source_file": "examples/toy/bof_01.c",
+  "function_name": "vulnerable_copy",
+  "sink_line": 10,
+  "cwe": "CWE-121",
+  "rationale": "stack_dst is 16 bytes but the loop runs len times with len bounded only by 256; any len in (16, 256] writes out of bounds.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 256,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "preconditions": [
+    "len > 16",
+    "len <= 256"
+  ],
+  "timeout_s": 30
+}

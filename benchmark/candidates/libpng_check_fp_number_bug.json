@@ -1,0 +1,39 @@
+{
+  "source_file": "examples/real/png_check_fp_number_bug.c",
+  "function_name": "png_check_fp_number_bug",
+  "cwe": "CWE-125",
+  "rationale": "Positive control: libpng-shaped parser with an injected off-by-check. When *statep has PNG_FP_WAS_VALID set and *whereami == size, the function reads string[i] one past the buffer end.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "string",
+      "c_type": "const char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "size",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    },
+    {
+      "name": "statep",
+      "c_type": "int *",
+      "size_bytes": 1,
+      "is_pointer": true
+    },
+    {
+      "name": "whereami",
+      "c_type": "size_t *",
+      "size_bytes": 1,
+      "is_pointer": true
+    }
+  ],
+  "loop_bounds": {
+    "size": 4
+  },
+  "use_bounds": true,
+  "auto_relax_on_infeasible": false,
+  "timeout_s": 30
+}

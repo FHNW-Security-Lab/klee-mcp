@@ -1,0 +1,23 @@
+{
+  "source_file": "examples/toy/safe_01.c",
+  "function_name": "safe_copy",
+  "sink_line": 10,
+  "cwe": "CWE-121",
+  "rationale": "Negative control. LLM might flag the copy loop; KLEE should prove no OOB is reachable because len < sizeof(stack_dst) is enforced.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 256,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "timeout_s": 30
+}

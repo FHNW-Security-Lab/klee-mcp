@@ -1,0 +1,40 @@
+{
+  "source_file": "examples/real/png_check_fp_number.c",
+  "function_name": "png_check_fp_number",
+  "cwe": "CWE-125",
+  "rationale": "Real libpng 1.6.47 function (png.c:2131). Parses attacker-controlled ASCII bytes used in sCAL/pCAL chunk data. Loop reads string[i] under the guard i < size; we ask KLEE whether any input can drive OOB. Expected: infeasible \u2014 loop bound is correct. Negative control on real-library code.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "string",
+      "c_type": "const char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "size",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    },
+    {
+      "name": "statep",
+      "c_type": "int *",
+      "size_bytes": 1,
+      "is_pointer": true
+    },
+    {
+      "name": "whereami",
+      "c_type": "size_t *",
+      "size_bytes": 1,
+      "is_pointer": true
+    }
+  ],
+  "loop_bounds": {
+    "size": 4
+  },
+  "use_bounds": true,
+  "auto_relax_on_infeasible": false,
+  "timeout_s": 60,
+  "expected_verdict": "infeasible"
+}

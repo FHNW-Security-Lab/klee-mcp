@@ -1,0 +1,23 @@
+{
+  "source_file": "examples/toy/intoverflow_01.c",
+  "function_name": "compute_capacity",
+  "sink_line": 15,
+  "cwe": "CWE-190",
+  "rationale": "count * per_entry can wrap to a small value that passes the bound check; the loop then writes using count (the un-wrapped value) into a 64-byte arena.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "count",
+      "c_type": "uint32_t",
+      "size_bytes": 4,
+      "is_pointer": false
+    },
+    {
+      "name": "per_entry",
+      "c_type": "uint32_t",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "timeout_s": 60
+}

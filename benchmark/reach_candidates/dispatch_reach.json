@@ -1,0 +1,30 @@
+{
+  "source_file": "examples/toy/dispatch_01.c",
+  "entry_function": "outer_dispatch",
+  "target_function": "inner_sink",
+  "tainted_inputs": [
+    {
+      "name": "opcode",
+      "c_type": "uint8_t",
+      "size_bytes": 1,
+      "is_pointer": false
+    },
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 256,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "len": 40
+  },
+  "use_bounds": true,
+  "timeout_s": 30
+}
