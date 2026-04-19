@@ -1,0 +1,35 @@
+{
+  "source_file": "examples/real/fuzz_jpeg_header.c",
+  "function_name": "fuzz_jpeg_header",
+  "cwe": "OTHER",
+  "rationale": "libjpeg-turbo 3.0.4 whole-library harness. Creates a decompress object, feeds 12 symbolic attacker bytes via jpeg_mem_src, then calls jpeg_read_header. Exercises SOF/DHT/DQT/DRI/DAC/SOS marker parsers. Looking for real memory-safety bugs in marker parsing.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const unsigned char *",
+      "size_bytes": 32,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "unsigned long",
+      "size_bytes": 8,
+      "is_pointer": false
+    }
+  ],
+  "assumptions": [
+    "buf[0] == 0xFF",
+    "buf[1] == 0xD8"
+  ],
+  "loop_bounds": {
+    "len": 32
+  },
+  "use_bounds": true,
+  "extra_bitcodes": [
+    "realworld/bitcode/libjpeg.bc"
+  ],
+  "timeout_s": 180,
+  "max_memory_mb": 16000,
+  "expected_verdict": "infeasible"
+}

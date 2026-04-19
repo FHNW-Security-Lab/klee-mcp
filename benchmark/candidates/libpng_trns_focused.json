@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/real/whole_lib_trns_focused.c",
+  "function_name": "fuzz_trns_payload",
+  "cwe": "CWE-125",
+  "rationale": "Focused audit of png_handle_tRNS (libpng 1.6.47). The harness builds a valid PNG prefix (signature + IHDR palette + PLTE with 1 palette entry), then pushes a tRNS chunk whose 4-byte length field and up to 4 bytes of payload are symbolic. Target: implicit uint32->uint16 truncation in png_handle_tRNS palette mode + OOB read on palette index.",
+  "confidence": "medium",
+  "tainted_inputs": [
+    {
+      "name": "payload",
+      "c_type": "const unsigned char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "payload_len",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "payload_len": 4
+  },
+  "use_bounds": true,
+  "extra_bitcodes": [
+    "realworld/bitcode/libpng.bc"
+  ],
+  "timeout_s": 240,
+  "max_memory_mb": 16000,
+  "expected_verdict": "infeasible"
+}

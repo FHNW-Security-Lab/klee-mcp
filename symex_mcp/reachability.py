@@ -243,8 +243,16 @@ klee \\
             target_function=req.target_function,
             harness_path=str(harness_path),
             patched_source_path=str(patched_path),
-            stdout_tail=_tail(te.stdout or ""),
-            stderr_tail=_tail(te.stderr or ""),
+            stdout_tail=_tail(
+                (te.stdout or b"").decode("utf-8", errors="replace")
+                if isinstance(te.stdout, (bytes, bytearray))
+                else (te.stdout or "")
+            ),
+            stderr_tail=_tail(
+                (te.stderr or b"").decode("utf-8", errors="replace")
+                if isinstance(te.stderr, (bytes, bytearray))
+                else (te.stderr or "")
+            ),
             wall_seconds=time.time() - t0,
             bounds_applied=bool(req.use_bounds and (req.assumptions or req.loop_bounds)),
             notes="container wall-clock timeout",

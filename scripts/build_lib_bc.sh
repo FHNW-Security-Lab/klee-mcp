@@ -38,8 +38,17 @@ case "$name" in
     libpng)
         exclude_regex="(example|pngtest|tools/|oss-fuzz)"
         ;;
-    zlib)
-        exclude_regex="(^$)" # none for now
+    libjpeg|libjpeg-turbo)
+        # exclude any source with a main() or that isn't part of the library.
+        # Matches any path containing one of these basenames.
+        exclude_regex="(/cjpeg\.c|/djpeg\.c|/jpegtran\.c|/tjbench\.c|/tjexample\.c|/tjunittest\.c|/jcstest\.c|/strtest\.c|/rdjpgcom\.c|/wrjpgcom\.c|/example\.c|/rdbmp\.c|/wrbmp\.c|/rdppm\.c|/wrppm\.c|/rdgif\.c|/wrgif\.c|/rdtarga\.c|/wrtarga\.c|/rdswitch\.c|/cdjpeg\.c|/jmemansi\.c|/jmemname\.c)"
+        ;;
+    libxml2)
+        # exclude tests, programs, python binding, and example runners
+        exclude_regex="(/runsuite\.c|/runtest\.c|/runxmlconf\.c|/testapi\.c|/testchar\.c|/testdict\.c|/testdso\.c|/testlimits\.c|/testModule\.c|/testOOM\.c|/testOOMlib\.c|/testparser\.c|/testrecurse\.c|/testThreads\.c|/xmllint\.c|/xmlcatalog\.c|/python/)"
+        ;;
+    zlib|*)
+        exclude_regex="(__NEVERMATCH__)" # match nothing (no exclusions)
         ;;
 esac
 

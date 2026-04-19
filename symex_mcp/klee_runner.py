@@ -72,12 +72,18 @@ def _container_invoke(workdir: Path, inner_cmd: str, timeout_s: int) -> subproce
         "-lc",
         inner_cmd,
     ]
-    return subprocess.run(
+    proc = subprocess.run(
         cmd,
         capture_output=True,
-        text=True,
+        text=False,
         timeout=timeout_s + 30,
     )
+    # Some KLEE runs emit bytes that aren't valid UTF-8 (e.g. binary data
+    # from crashed symbolic states). Decode with replace so we don't lose
+    # the whole run to a single bad byte.
+    proc.stdout = (proc.stdout or b"").decode("utf-8", errors="replace")
+    proc.stderr = (proc.stderr or b"").decode("utf-8", errors="replace")
+    return proc
 
 
 def _find_klee_out(workdir: Path) -> Path | None:
@@ -211,14 +217,20 @@ ls -1d klee-out-* 2>/dev/null | tail -n1 > /work/.last_out
         try:
             proc = _container_invoke(scratch, inner, req.timeout_s)
         except subprocess.TimeoutExpired as te:
+            te_stdout = te.stdout or b""
+            te_stderr = te.stderr or b""
+            if isinstance(te_stdout, bytes):
+                te_stdout = te_stdout.decode("utf-8", errors="replace")
+            if isinstance(te_stderr, bytes):
+                te_stderr = te_stderr.decode("utf-8", errors="replace")
             return VerifyResponse(
                 verdict=VerifyVerdict.TIMEOUT,
                 cwe=req.cwe,
                 source_file=str(source),
                 function_name=req.function_name,
                 sink_line=req.sink_line,
-                stdout_tail=_tail(te.stdout or ""),
-                stderr_tail=_tail(te.stderr or ""),
+                stdout_tail=_tail(te_stdout),
+                stderr_tail=_tail(te_stderr),
                 harness_path=str(harness_path),
                 wall_seconds=time.time() - t0,
                 notes="container wall-clock timeout",

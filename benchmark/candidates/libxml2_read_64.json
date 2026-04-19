@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/real/fuzz_xml_read_64.c",
+  "function_name": "fuzz_xml64",
+  "cwe": "OTHER",
+  "rationale": "Deeper libxml2 audit: 64 symbolic bytes to xmlReadMemory. Doubles the state space of the 32-byte baseline to see if any memory-safety error surfaces in a longer time budget.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 64,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "len": 64
+  },
+  "use_bounds": true,
+  "extra_bitcodes": [
+    "realworld/bitcode/libxml2.bc"
+  ],
+  "timeout_s": 360,
+  "max_memory_mb": 16000,
+  "expected_verdict": "infeasible"
+}

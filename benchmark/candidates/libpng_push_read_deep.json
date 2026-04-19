@@ -1,0 +1,41 @@
+{
+  "source_file": "examples/real/whole_lib_push_read_deep.c",
+  "function_name": "fuzz_push",
+  "cwe": "OTHER",
+  "rationale": "Deeper libpng push-mode audit: 32 symbolic bytes with the PNG signature (89 50 4E 47 0D 0A 1A 0A) constrained to be correct, so KLEE explores chunk-header parsing beyond the signature check. Looking for real OOB in chunk dispatch / IHDR validation.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const unsigned char *",
+      "size_bytes": 32,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    }
+  ],
+  "assumptions": [
+    "buf[0] == 0x89",
+    "buf[1] == 0x50",
+    "buf[2] == 0x4E",
+    "buf[3] == 0x47",
+    "buf[4] == 0x0D",
+    "buf[5] == 0x0A",
+    "buf[6] == 0x1A",
+    "buf[7] == 0x0A"
+  ],
+  "loop_bounds": {
+    "len": 32
+  },
+  "use_bounds": true,
+  "extra_bitcodes": [
+    "realworld/bitcode/libpng.bc"
+  ],
+  "timeout_s": 240,
+  "max_memory_mb": 16000,
+  "expected_verdict": "infeasible"
+}
