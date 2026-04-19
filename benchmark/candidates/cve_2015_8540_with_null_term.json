@@ -1,0 +1,35 @@
+{
+  "source_file": "examples/real/png_check_keyword_1619.c",
+  "function_name": "png_check_keyword_1619",
+  "cwe": "CWE-125",
+  "rationale": "Counterfactual for the CVE-2015-8540 finding: same function, same 4-byte symbolic key buffer, but now an LLM-supplied bound that asserts the last byte is 0. This models the caller-contract fix that landed in libpng 1.6.20. KLEE should return infeasible, confirming that if the library had enforced (or the caller had guaranteed) null-termination, the OOB would not be reachable.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "png_ptr",
+      "c_type": "void *",
+      "size_bytes": 0,
+      "is_pointer": true
+    },
+    {
+      "name": "key",
+      "c_type": "const char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "new_key",
+      "c_type": "unsigned char *",
+      "size_bytes": 80,
+      "is_pointer": true
+    }
+  ],
+  "assumptions": [
+    "key[3] == 0"
+  ],
+  "use_bounds": true,
+  "auto_relax_on_infeasible": false,
+  "timeout_s": 60,
+  "max_memory_mb": 16000,
+  "expected_verdict": "infeasible"
+}
