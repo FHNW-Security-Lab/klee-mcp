@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/real/fuzz_xml_read.c",
+  "function_name": "fuzz_xml",
+  "cwe": "OTHER",
+  "rationale": "Second-library audit: libxml2 2.12.6 whole-library bitcode (9.4 MB, 106 TUs). Minimal harness feeds 32 symbolic bytes to xmlReadMemory. No setjmp/longjmp in the parse path, so KLEE should explore deeper than libjpeg-turbo.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "buf",
+      "c_type": "const char *",
+      "size_bytes": 32,
+      "is_pointer": true
+    },
+    {
+      "name": "len",
+      "c_type": "int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "len": 32
+  },
+  "use_bounds": true,
+  "extra_bitcodes": [
+    "realworld/bitcode/libxml2.bc"
+  ],
+  "timeout_s": 180,
+  "max_memory_mb": 16000,
+  "expected_verdict": "infeasible"
+}

@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/real/png_check_keyword_1647.c",
+  "function_name": "png_check_keyword_1647",
+  "cwe": "CWE-125",
+  "rationale": "Test whether the same OOB read we confirmed in libpng 1.6.19 (CVE-2015-8540 pattern) still exists in libpng 1.6.47 (current upstream). If so, the function continues to trust caller null-termination, and the CVE fix was in callers rather than in png_check_keyword itself.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "png_ptr",
+      "c_type": "void *",
+      "size_bytes": 0,
+      "is_pointer": true
+    },
+    {
+      "name": "key",
+      "c_type": "const char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "new_key",
+      "c_type": "unsigned char *",
+      "size_bytes": 80,
+      "is_pointer": true
+    }
+  ],
+  "use_bounds": false,
+  "timeout_s": 60,
+  "max_memory_mb": 16000,
+  "expected_verdict": "confirmed"
+}

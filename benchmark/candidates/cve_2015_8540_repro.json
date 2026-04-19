@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/real/png_check_keyword_1619.c",
+  "function_name": "png_check_keyword_1619",
+  "cwe": "CWE-125",
+  "rationale": "CVE-2015-8540 reproduction. png_check_keyword in libpng before 1.6.20 reads from `*key` until it hits 0, with no length bound on the input buffer. If caller passes a non-null-terminated key whose underlying allocation is smaller than 80 bytes, the inner while-loop will read past the allocation. We give KLEE a 4-byte symbolic key buffer (not null-terminated) and an 80-byte new_key output buffer. If KLEE returns confirmed + Ptr error, the CVE is reproduced.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "png_ptr",
+      "c_type": "void *",
+      "size_bytes": 0,
+      "is_pointer": true
+    },
+    {
+      "name": "key",
+      "c_type": "const char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "new_key",
+      "c_type": "unsigned char *",
+      "size_bytes": 80,
+      "is_pointer": true
+    }
+  ],
+  "use_bounds": false,
+  "timeout_s": 60,
+  "max_memory_mb": 16000,
+  "expected_verdict": "confirmed"
+}
