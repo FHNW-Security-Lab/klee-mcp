@@ -8,28 +8,27 @@ and Offensive Operations*), Royal Marine Hotel, Dublin, 9–11 September 2026.
 
 | File | Purpose |
 |---|---|
-| `klee-mcp-kes-blinded.tex` / `.pdf` | **Submission version**. Authors, affiliation, emails, and the GitHub URL anonymised; self-citations rephrased in third person. 8 pages. |
-| `klee-mcp-kes.tex` / `.pdf` | **Camera-ready / archival version** with full author list and code URL. 8 pages. |
-| `ecrc.sty`, `elsarticle.cls`, `elsarticle-harv.bst`, `framed.sty` | Elsevier Procedia Computer Science template files (bundled here so the paper compiles standalone). |
+| `klee-mcp-kes.tex` / `.pdf` | **Submission paper.** Christopher Scherb, Alexander Trapp, Ruben Hutter, Nico Bachmann, Luc Bryan Heitz (all FHNW University of Applied Sciences and Arts Northwestern Switzerland). 8 pages in the Elsevier Procedia Computer Science layout — within the KES 8–10 page cap. |
+| `ecrc.sty`, `elsarticle.cls`, `elsarticle-harv.bst`, `framed.sty` | Procedia Computer Science template files (bundled here so the paper compiles standalone). |
 | `Procs.{eps,pdf}`, `SDlogo-3p.{eps,pdf}`, `elsevier-logo-3p.{eps,pdf}` | Procedia journal logos referenced by `ecrc.sty`. |
 
 ## Build
 
 ```
-pdflatex klee-mcp-kes.tex          # camera-ready
-pdflatex klee-mcp-kes-blinded.tex  # double-blind submission
+pdflatex klee-mcp-kes.tex
+pdflatex klee-mcp-kes.tex   # second pass for cross-references
+pdflatex klee-mcp-kes.tex   # third pass for final layout
 ```
-
-(Run twice each for cross-references.)
 
 ## Format
 
 Procedia Computer Science (Elsevier CRC), `procedia` option of
-`elsarticle.cls`. KES paper-length cap: 8–10 pages including
-references and appendices.
+`elsarticle.cls`. KES paper-length cap: **8–10 pages including
+references and appendices**.
 
 ## Review model
 
-KES uses double-blind peer review. The `*-blinded.pdf` is what gets
-uploaded to the submission system; the unblinded version is for
-post-acceptance camera-ready / repository archival.
+KES 2026's official submission page does not specify whether reviews are
+double-blind or single-blind. Authors and affiliation are visible in
+this submission file; if the venue clarifies a double-blind requirement
+prior to the deadline, prepare an anonymised variant.
