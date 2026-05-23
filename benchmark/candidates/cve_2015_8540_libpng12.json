@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/real/png_check_keyword_1256.c",
+  "function_name": "png_check_keyword_1256",
+  "cwe": "CWE-125",
+  "rationale": "Cross-version reproduction of the CVE-2015-8540 family pattern in libpng 1.2.56 (older code path that uses png_strlen + a for-loop on *kp). 4-byte symbolic key, no null terminator. If KLEE confirms the OOB, the same caller-contract bug is present across the 1.2 and 1.6 series with structurally different code.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "png_ptr",
+      "c_type": "void *",
+      "size_bytes": 0,
+      "is_pointer": true
+    },
+    {
+      "name": "key",
+      "c_type": "char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "new_key",
+      "c_type": "char **",
+      "size_bytes": 8,
+      "is_pointer": true
+    }
+  ],
+  "use_bounds": false,
+  "timeout_s": 60,
+  "max_memory_mb": 16000,
+  "expected_verdict": "confirmed"
+}
