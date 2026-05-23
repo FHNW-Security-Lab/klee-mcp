@@ -1,0 +1,39 @@
+{
+  "source_file": "examples/real/whole_lib_format_number.c",
+  "function_name": "fuzz_format_number",
+  "cwe": "CWE-787",
+  "rationale": "Baseline-sweep companion to libpng_format_number: same harness, same target, but with use_bounds=false (no LLM-supplied klee_assume). Used in \u00a75 to characterise the bounded-vs-unbounded delta across four real-library targets, not just the one in the original sensitivity pair.",
+  "confidence": "high",
+  "tainted_inputs": [
+    {
+      "name": "format",
+      "c_type": "int",
+      "size_bytes": 4,
+      "is_pointer": false
+    },
+    {
+      "name": "number",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    },
+    {
+      "name": "end_offset",
+      "c_type": "unsigned int",
+      "size_bytes": 4,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "end_offset": 16,
+    "number": 256,
+    "format": 8
+  },
+  "use_bounds": false,
+  "extra_bitcodes": [
+    "realworld/bitcode/libpng.bc"
+  ],
+  "timeout_s": 120,
+  "max_memory_mb": 16000,
+  "auto_relax_on_infeasible": false
+}

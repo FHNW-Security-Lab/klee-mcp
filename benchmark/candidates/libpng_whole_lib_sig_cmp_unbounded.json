@@ -1,0 +1,38 @@
+{
+  "source_file": "examples/real/whole_lib_sig_cmp.c",
+  "function_name": "png_sig_cmp",
+  "cwe": "CWE-125",
+  "rationale": "Baseline-sweep companion to libpng_whole_lib_sig_cmp: same harness, same target, but with use_bounds=false (no LLM-supplied klee_assume). Used in \u00a75 to characterise the bounded-vs-unbounded delta across four real-library targets, not just the one in the original sensitivity pair.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "sig",
+      "c_type": "const unsigned char *",
+      "size_bytes": 8,
+      "is_pointer": true
+    },
+    {
+      "name": "start",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    },
+    {
+      "name": "num_to_check",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    }
+  ],
+  "loop_bounds": {
+    "start": 16,
+    "num_to_check": 16
+  },
+  "use_bounds": false,
+  "extra_bitcodes": [
+    "realworld/bitcode/libpng.bc"
+  ],
+  "timeout_s": 60,
+  "max_memory_mb": 16000,
+  "auto_relax_on_infeasible": false
+}

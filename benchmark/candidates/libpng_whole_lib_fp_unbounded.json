@@ -1,0 +1,43 @@
+{
+  "source_file": "examples/real/whole_lib_fp_number.c",
+  "function_name": "png_check_fp_number",
+  "cwe": "CWE-125",
+  "rationale": "Baseline-sweep companion to libpng_whole_lib_fp: same harness, same target, but with use_bounds=false (no LLM-supplied klee_assume). Used in \u00a75 to characterise the bounded-vs-unbounded delta across four real-library targets, not just the one in the original sensitivity pair.",
+  "confidence": "low",
+  "tainted_inputs": [
+    {
+      "name": "string",
+      "c_type": "const char *",
+      "size_bytes": 4,
+      "is_pointer": true
+    },
+    {
+      "name": "size",
+      "c_type": "size_t",
+      "size_bytes": 8,
+      "is_pointer": false
+    },
+    {
+      "name": "statep",
+      "c_type": "int *",
+      "size_bytes": 1,
+      "is_pointer": true
+    },
+    {
+      "name": "whereami",
+      "c_type": "size_t *",
+      "size_bytes": 1,
+      "is_pointer": true
+    }
+  ],
+  "loop_bounds": {
+    "size": 4
+  },
+  "use_bounds": false,
+  "extra_bitcodes": [
+    "realworld/bitcode/libpng.bc"
+  ],
+  "timeout_s": 60,
+  "max_memory_mb": 16000,
+  "auto_relax_on_infeasible": false
+}
