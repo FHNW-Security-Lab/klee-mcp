@@ -72,6 +72,12 @@ Vulnerability triage \sep symbolic execution \sep KLEE \sep large language model
 
 \section{Introduction}
 \label{sec:intro}
+%% ecrc.sty anchors the page-1 footer copyright block at a fixed
+%% position that overflows upward; with a full page-1 body the
+%% corresponding-author footnote collides with it. Shrinking the
+%% page-1 text height by a few lines gives the footnote clearance,
+%% reproducing the clean stacking seen in the stock template.
+\enlargethispage{-2\baselineskip}
 
 Triage is the bottleneck of C/C++ vulnerability work: static analysers emit thousands of candidates, most of which are false positives, and language models are good at proposing plausible candidates but cannot produce concrete crashing inputs. Symbolic execution --- KLEE \cite{klee} being the standard reference --- can produce such inputs if given a harness with the right preconditions. We join these two halves through the Model Context Protocol (MCP) \cite{mcp}: KLEE is exposed as an MCP server, and a tool-using LLM agent (Claude Code) commits to a structured candidate schema that the server turns into a harness and a verdict. The loop runs from a single natural-language instruction and closes with either a byte-accurate crashing input or a proof of infeasibility under the LLM's declared preconditions.
 
