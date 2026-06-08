@@ -356,9 +356,4 @@ This work was carried out at the University of Applied Sciences and Arts Northwe
 
 \end{thebibliography}
 
-\clearpage
-\section*{Appendix~A. Commentary on Reviewer-Requested Revisions}
-
-We thank the reviewers for their constructive feedback. In response to Review~2, we revised the paper in five main ways. \emph{First}, we added a within-tool baseline comparison against raw KLEE without LLM-supplied bounds in Section~\ref{sec:eval}. \emph{Second}, we clarified in Section~\ref{sec:exploit} that the exploitability classifier and CVSS vector are heuristic triage aids rather than validated severity claims, and added a manual cross-check of the classifier's labels against human-assigned labels on all 10 confirmed cases in our benchmark. \emph{Third}, we moderated the real-world-impact claims by framing \texttt{png\_format\_number} as a defense-in-depth contract violation and by reporting CVE-2015-8540 \cite{cve20158540} reproductions across libpng 1.2.56, 1.6.19, and 1.6.47 (Table~\ref{tab:cve}). \emph{Fourth}, we rewrote the contribution framing in Section~\ref{sec:intro} to emphasise the candidate schema, the retractable-bounds protocol, and the symex-witness-to-disclosure pipeline rather than mere system integration. \emph{Fifth}, we revised the abstract, evaluation, and limitations to state that the 14-case benchmark is a small proof-of-concept and not a precision claim against an external corpus. Review~1 raised no required revision; we tightened the framing of Section~\ref{sec:intro} so that the methodological contribution stands out earlier in the paper.
-
 \end{document}
