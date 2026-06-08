@@ -14,20 +14,20 @@
 \@writefile{toc}{\contentsline {paragraph}{System and evaluation}{2}{section*.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Design}{2}{section.2}\protected@file@percent }
 \newlabel{sec:design}{{2}{2}{Design}{section.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Candidate schema}{2}{subsection.2.1}\protected@file@percent }
-\newlabel{sec:schema}{{2.1}{2}{Candidate schema}{subsection.2.1}{}}
-\citation{klee}
-\citation{ucklee}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Candidate schema}{3}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:schema}{{2.1}{3}{Candidate schema}{subsection.2.1}{}}
 \newlabel{lst:candidate}{{1}{3}{Candidate JSON for the libpng \texttt {png\_format\_number} OOB write}{lstlisting.1}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Candidate JSON for the libpng \texttt  {png\_format\_number} OOB write.}{3}{lstlisting.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}MCP tools}{3}{subsection.2.2}\protected@file@percent }
 \newlabel{sec:tools}{{2.2}{3}{MCP tools}{subsection.2.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Orchestrator skill}{3}{subsection.2.3}\protected@file@percent }
 \newlabel{sec:skill}{{2.3}{3}{Orchestrator skill}{subsection.2.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Implementation}{3}{section.3}\protected@file@percent }
-\newlabel{sec:impl}{{3}{3}{Implementation}{section.3}{}}
+\citation{klee}
+\citation{ucklee}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Exploitability primitives. The classifier combines KLEE's faulting-address expression (symbolic vs concrete) with the declared CWE and a source-line read/write heuristic to assign one of these labels to each confirmed verdict.}}{4}{table.1}\protected@file@percent }
 \newlabel{tab:prim}{{1}{4}{Exploitability primitives. The classifier combines KLEE's faulting-address expression (symbolic vs concrete) with the declared CWE and a source-line read/write heuristic to assign one of these labels to each confirmed verdict}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Implementation}{4}{section.3}\protected@file@percent }
+\newlabel{sec:impl}{{3}{4}{Implementation}{section.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Exploitability classification}{4}{section.4}\protected@file@percent }
 \newlabel{sec:exploit}{{4}{4}{Exploitability classification}{section.4}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Hand-constructed 14-candidate proof-of-concept benchmark. B\,=\,\texttt  {use\_bounds=true}; R\,=\,server auto-relaxed after a bounded infeasible run. The pipeline returns the expected verdict on every row of this small benchmark; the result is descriptive of these cases, not a precision claim against an external corpus.}}{5}{table.2}\protected@file@percent }
@@ -37,14 +37,13 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Setup}{5}{subsection.5.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Benchmark}{5}{subsection.5.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Result on the proof-of-concept benchmark}{5}{section*.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Confirmed-vs-infeasible separation (C1)}{5}{section*.4}\protected@file@percent }
 \citation{cve20158540}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces CVE-2015-8540 reproductions and counterfactual. Same 4-byte symbolic non-null-terminated \texttt  {key}, same 80-byte output buffer in every run.}}{6}{table.3}\protected@file@percent }
 \newlabel{tab:cve}{{3}{6}{CVE-2015-8540 reproductions and counterfactual. Same 4-byte symbolic non-null-terminated \texttt {key}, same 80-byte output buffer in every run}{table.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Confirmed-vs-infeasible separation (C1)}{6}{section*.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{LLM bounds as caller contracts, self-correcting (C2)}{6}{section*.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Baseline contrast: with vs without LLM bounds}{6}{section*.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Historical CVE reproduction: CVE-2015-8540 \cite  {cve20158540}}{6}{section*.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Cross-library audit}{6}{section*.8}\protected@file@percent }
 \citation{symtee}
 \citation{promptfuzz}
 \citation{ossfuzzgen}
@@ -59,6 +58,7 @@
 \citation{fudge}
 \citation{scherb-divconq,scherb-cps}
 \citation{mcp}
+\@writefile{toc}{\contentsline {paragraph}{Cross-library audit}{7}{section*.8}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Whole-library bitcode scales to real code (C3)}{7}{section*.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {6}Related work}{7}{section.6}\protected@file@percent }
 \newlabel{sec:related}{{6}{7}{Related work}{section.6}{}}
@@ -66,8 +66,6 @@
 \@writefile{toc}{\contentsline {paragraph}{LLM embedded in a symbolic engine}{7}{section*.11}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Automated PoC generation}{7}{section*.12}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Foundations and MCP as substrate}{7}{section*.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations, future work, and conclusion}{7}{section.7}\protected@file@percent }
-\newlabel{sec:limits}{{7}{7}{Limitations, future work, and conclusion}{section.7}{}}
 \bibcite{klee}{{1}{}{{}}{{}}}
 \bibcite{angr}{{2}{}{{}}{{}}}
 \bibcite{ucklee}{{3}{}{{}}{{}}}
@@ -85,5 +83,7 @@
 \bibcite{scherb-cps}{{15}{}{{}}{{}}}
 \bibcite{cve20158540}{{16}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\newlabel{lastpage}{{7}{8}{Acknowledgements}{section*.15}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations, future work, and conclusion}{8}{section.7}\protected@file@percent }
+\newlabel{sec:limits}{{7}{8}{Limitations, future work, and conclusion}{section.7}{}}
+\newlabel{lastpage}{{7}{8}{Limitations, future work, and conclusion}{section*.14}{}}
 \gdef \@abspage@last{8}
