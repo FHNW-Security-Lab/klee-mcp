@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+  \node[box,text width=29mm] (llm) at (0,0) {\textbf{LLM auditor}\\Candidate + assumptions};
+  \node[focus,text width=29mm] (mcp) at (4.35,0) {\textbf{MCP server}\\Harness + tool calls};
+  \node[good,text width=29mm] (klee) at (8.7,0) {\textbf{KLEE}\\Symbolic validation};
+  \draw[arrow] (llm) -- node[above,font=\footnotesize]{schema} (mcp);
+  \draw[arrow] (mcp) -- node[above,font=\footnotesize]{LLVM} (klee);
+  \draw[arrow,teal] (klee.south) -- ++(0,-0.85) -| node[pos=0.25,below,font=\footnotesize]{Verdict + evidence + execution limits} (llm.south);
+  \node[label,text width=100mm] at (4.35,1.15) {MCP = Model Context Protocol: a structured tool interface};
+\end{tikzpicture}

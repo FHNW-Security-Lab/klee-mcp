@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+  \node[focus] (input) at (0,2.8) {Symbolic input $x$};
+  \node[box] (branch) at (0,1.4) {Branch condition};
+  \node[good,text width=24mm] (left) at (-2,0) {Path A\\$P_A(x)$};
+  \node[bad,text width=24mm] (right) at (2,0) {Path B\\$P_B(x)$};
+  \draw[arrow] (input) -- (branch);
+  \draw[arrow] (branch) -- node[left=2mm,font=\footnotesize]{true} (left);
+  \draw[arrow] (branch) -- node[right=2mm,font=\footnotesize]{false} (right);
+  \node[label,below=2mm of left] {Check property};
+  \node[label,below=2mm of right] {Check property};
+\end{tikzpicture}

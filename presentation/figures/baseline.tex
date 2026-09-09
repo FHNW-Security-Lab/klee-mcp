@@ -1,0 +1,13 @@
+\begin{tikzpicture}[x=0.11cm,y=1cm]
+  \node[anchor=east,align=right] at (-2,1.6) {Without\\semantic bound};
+  \node[anchor=east,align=right] at (-2,0.2) {With\\semantic bound};
+  \fill[ink!75] (0,1.38) rectangle (60,1.82);
+  \fill[teal] (0,-0.02) rectangle (30.9,0.42);
+  \node[anchor=west,font=\footnotesize] at (61,1.6) {60 s: timeout};
+  \node[anchor=west,font=\footnotesize] at (31.9,0.2) {30.9 s: infeasible};
+  \node[anchor=west,font=\footnotesize,text=muted] at (0,0.97) {1,700 partially completed paths};
+  \node[anchor=west,font=\footnotesize,text=teal] at (0,-0.45) {1,438 completed paths; none partial};
+  \draw[ink!35] (0,-0.85) -- (60,-0.85);
+  \foreach \t in {0,15,30,45,60}{\draw[ink!35] (\t,-0.85) -- (\t,-0.93);\node[font=\scriptsize,below] at (\t,-0.93) {\t};}
+  \node[font=\footnotesize,text=muted] at (30,-1.5) {Wall time (seconds)};
+\end{tikzpicture}

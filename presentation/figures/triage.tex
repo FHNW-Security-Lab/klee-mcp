@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+  \node[box,text width=32mm] (claim) at (0,0) {\textbf{LLM auditor}\\Plausible candidate};
+  \node[focus,text width=35mm] (gap) at (4.65,0) {\textbf{Triage gap}\\What is the evidence?};
+  \node[good,text width=32mm] (evidence) at (9.3,0) {\textbf{Validation}\\Scoped result};
+  \draw[arrow] (claim) -- (gap);
+  \draw[arrow] (gap) -- (evidence);
+  \node[label,text width=36mm,below=4mm of claim] {Reason about intent\\and possible mistakes};
+  \node[label,text width=36mm,below=4mm of gap] {Model the caller\\and the environment};
+  \node[label,text width=36mm,below=4mm of evidence] {Check the claim under\\explicit assumptions};
+\end{tikzpicture}

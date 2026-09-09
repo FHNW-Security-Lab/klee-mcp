@@ -1,0 +1,46 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{theme/fhnw-kes}[2026/09/09 FHNW KES presentation]
+% Adapted from ../sysad/template/fhnwbeam.sty: FHNW palette, title band,
+% margins, dashed title rule, and yellow footer. See README for provenance.
+\RequirePackage{tikz}
+\RequirePackage{dashrule}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds,patterns}
+\definecolor{yellow}{RGB}{253,231,14}
+\definecolor{ink}{RGB}{45,55,60}
+\definecolor{teal}{RGB}{0,110,110}
+\definecolor{red}{RGB}{210,5,55}
+\definecolor{muted}{RGB}{110,117,123}
+\definecolor{pale}{RGB}{241,243,244}
+\setbeamercolor{normal text}{fg=ink,bg=white}
+\setbeamercolor{alerted text}{fg=red}
+\setbeamercolor{itemize item}{fg=teal}
+\setbeamercolor{frametitle}{fg=ink}
+\setbeamercolor{footline}{fg=ink,bg=yellow}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{itemize/enumerate body}{size=\normalsize}
+\setbeamersize{text margin left=9mm,text margin right=9mm}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\raisebox{0.15ex}{\tiny$\blacktriangleright$}}
+\setbeamertemplate{headline}{\color{yellow}\rule{\paperwidth}{1.1mm}}
+\setbeamertemplate{frametitle}{%
+  \vspace{3mm}\insertframetitle\par\vspace{0.4mm}%
+  {\color{muted!55}\hdashrule{\textwidth}{0.35pt}{1pt 1pt}}\vspace{-1mm}}
+\newcommand{\slidenumber}{\insertframenumber\,/\,17}
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.7mm,dp=1.3mm,leftskip=9mm,rightskip=9mm]{footline}
+    \fontsize{6}{7}\selectfont FHNW \enspace | \enspace Closing the Triage Loop \enspace | \enspace KES 2026
+    \hfill\slidenumber
+  \end{beamercolorbox}}
+\setbeamertemplate{note page}[plain]
+\newcommand{\source}[1]{\par\vspace{1mm}{\fontsize{6.5}{8}\selectfont\color{muted}#1\par}}
+\newcommand{\takeaway}[1]{\par\vspace{2mm}{\color{teal}\bfseries #1\par}}
+\newenvironment{points}{\begin{itemize}\setlength\itemsep{5pt}}{\end{itemize}}
+\tikzset{
+  every picture/.style={font=\small},
+  box/.style={draw=ink!65,fill=pale,minimum height=10mm,align=center,inner sep=5pt},
+  focus/.style={box,fill=yellow,draw=ink},
+  good/.style={box,fill=teal!9,draw=teal},
+  bad/.style={box,fill=red!7,draw=red},
+  arrow/.style={-{Stealth[length=2mm]},draw=ink,line width=0.8pt},
+  label/.style={font=\footnotesize,align=center,text=muted}
+}

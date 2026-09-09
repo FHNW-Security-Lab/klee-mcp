@@ -1,0 +1,10 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[anchor=west,font=\bfseries\color{teal}] at (0,2.25) {Candidate specification};
+  \foreach \y/\heading/\detail in {1.55/Claim/Function and weakness class,0.65/Inputs/Symbolic parameters and buffer sizes,-0.25/Contract/Assumptions about valid caller inputs,-1.15/Run policy/Resource budget and retry choice}{
+    \draw[ink!20] (0,\y-0.43) -- (6.05,\y-0.43);
+    \node[anchor=west,font=\bfseries] at (0,\y) {\heading};
+    \node[anchor=west,font=\footnotesize,text width=37mm] at (2.25,\y) {\detail};
+  }
+  \node[focus,text width=35mm] (spec) at (9,0.5) {A machine-checkable\\claim \textbf{before} analysis};
+  \draw[arrow] (6.3,0.5) -- (spec);
+\end{tikzpicture}

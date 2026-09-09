@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+  \draw[fill=pale,draw=ink!50] (0,0) rectangle (6,3.4);
+  \node[anchor=north west,font=\footnotesize] at (0.1,3.3) {Inputs represented by the harness};
+  \filldraw[fill=teal!12,draw=teal,thick] (2.2,1.45) ellipse (1.75 and 1.0);
+  \node[align=center,text=teal] at (2.2,1.45) {Caller contract $C$\\\footnotesize allowed inputs};
+  \node[circle,fill=red,inner sep=2.2pt] (error) at (5,1.8) {};
+  \node[below=2mm of error,align=center,font=\footnotesize,text=red] {Error\\outside $C$};
+  \node[anchor=west,text width=55mm,align=left] at (6.6,2.6) {$C(x)\;\land\;\mathrm{error}(x)$\\[2mm]\footnotesize The query includes\\the caller contract.};
+  \node[anchor=west,text width=55mm,align=left] at (6.6,0.95) {\textbf{Changing $C$ changes the claim}\\[2mm]\footnotesize An error outside $C$ does not refute safety inside $C$.};
+\end{tikzpicture}

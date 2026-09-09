@@ -121,6 +121,9 @@ installation and [`INSTALL.md`](INSTALL.md) for the quick setup.
 
 ## Repo layout
 
+- `presentation/` — [KES 2026 presentation](presentation/klee-mcp-kes-presentation.pdf):
+  20-minute FHNW-style talk, LaTeX/Beamer sources, TikZ figures, and timed
+  speaker notes. See [build instructions](presentation/README.md).
 - `symex_mcp/` — Python MCP server.
   - `server.py` — FastMCP entry point + 6 registered tools.
   - `klee_runner.py` — podman + KLEE driver with
