@@ -86,8 +86,9 @@ native TikZ, including the numerical charts; logo artwork is reused intact.
 ## Sources and interpretation
 
 All empirical statements come from `../paper/klee-mcp-kes.pdf`, checked
-against its LaTeX source. Slides cite the relevant paper sections/tables;
-the final backup slide gives bibliographic details. The diagrams are
+against its LaTeX source. Source provenance is recorded here and in the speaker notes, without
+self-citations on the slides. The final backup slide lists foundational
+work by other authors. The diagrams are
 conceptual explanations, not measured coverage or deployment diagrams.
 The benchmark chart aggregates the 14 rows of **Table 2** into four groups.
 These are reported paper results, not a new benchmark execution.
