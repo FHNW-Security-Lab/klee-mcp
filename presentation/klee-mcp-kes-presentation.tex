@@ -32,121 +32,158 @@
       {\footnotesize University of Applied Sciences and Arts Northwestern Switzerland}\\[3mm]
       {\small\color{teal}\bfseries KES 2026 \enspace | \enspace Dublin}};
   \end{tikzpicture}
-  \note{[0:30; cumulative 0:30] Introduce the team and our research question. The talk asks how to turn an AI-generated suspicion about C/C++ code into a result that a human reviewer can assess. Transition immediately to the audience question.}
+  \note{[0:30; cumulative 0:30] Introduce the team and our research question. The talk asks how to turn an AI-generated suspicion about C/C++ code into a result that a human reviewer can assess. Transition to curl as a concrete example of the cost of unverified reports.}
 \end{frame}
 
-% 02 | 00:30--01:30
-\begin{frame}{The AI says it found a bug}
+% 02 | 00:30--02:00
+\begin{frame}{curl: AI reports created real work for maintainers}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.32\textwidth}
+    {\fontsize{43}{48}\selectfont\bfseries $<5\%$\par}
+    \vspace{2mm}
+    {\small of security submissions\\confirmed as vulnerabilities\\in \textbf{2025}\par}
+    \column{0.63\textwidth}
+    \begin{points}
+      \item Low-quality AI reports consumed maintainer time
+      \item curl ended bounty rewards on \textbf{31 January 2026}
+      \item By April, AI-assisted reports had improved in quality; volume was higher
+    \end{points}
+  \end{columns}
+  \vspace{4mm}
+  \takeaway{A convincing report still needs independent verification}
   \vspace{2mm}
-  {\fontsize{25}{29}\selectfont\bfseries Would you report it?\par}
-  \vspace{6mm}
+  \source{Daniel Stenberg: \href{https://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/}{The end of the curl bug-bounty} (26 Jan 2026); \href{https://daniel.haxx.se/blog/2026/04/22/high-quality-chaos/}{High-Quality Chaos} (22 Apr 2026).}
+  \note{[1:30; cumulative 2:00] Introduce curl as the data-transfer tool and library. The percentage covers all security submissions, not only AI-generated ones. Ending rewards did not end security reporting. By April, Stenberg described largely high-quality AI-assisted reports and a higher workload. The lesson is to validate candidates before escalating them. curl motivates our research question; it is not an evaluated target of our system. Sources: the two linked posts by Daniel Stenberg.}
+\end{frame}
+
+% 03 | 02:00--02:45
+\begin{frame}{The problem: which AI findings are real?}
+  \vspace{1mm}
+  {\Large\bfseries An LLM flags a possible C/C++ bug.\\Would you report it?\par}
+  \vspace{4mm}
   \begin{points}
-    \item The explanation sounds plausible
-    \item There is no observed failing execution yet
-    \item The input assumptions may be wrong
+    \item A convincing explanation is not execution evidence
+    \item A failure may depend on inputs that real callers never provide
+    \item Manually building a test and checking callers takes work
   \end{points}
   \vspace{4mm}
-  \begin{tikzpicture}
-    \node[box,text width=31mm] (a) at (0,0) {A plausible claim};
-    \node[focus,text width=45mm] (b) at (6.2,0) {What evidence would\\change your decision?};
-    \draw[arrow] (a) -- (b);
-  \end{tikzpicture}
-  \note{[1:00; cumulative 1:30] Ask for a show of hands: would you send this report to a maintainer? Pause for roughly five seconds. Ask the audience to think of the missing evidence: a concrete failure, a realistic caller, and the assumptions that make the execution possible. This is a hypothetical opening, not a measured user study. Return to this question on the final slide.}
+  \takeaway{Our goal: check each candidate and explain the conditions\\under which it can fail}
+  \note{[0:45; cumulative 2:45] Connect the curl example to our problem, then ask for a brief show of hands. We want to turn a suspected C/C++ error into a checked result: can it happen, under which assumptions, and with what evidence? Triage means deciding which findings deserve further investigation. We are validating candidates, not proving an entire codebase safe.}
 \end{frame}
 
-% 03 | 01:30--02:30
-\begin{frame}{The triage gap}
-  \centering\input{figures/triage}
-  \vspace{3mm}
+% 04 | 02:45--03:45
+\begin{frame}{The LLM selects what to check}
   \begin{points}
-    \item LLMs propose candidates and infer context
-    \item Symbolic execution checks behavior in an explicit model
-    \item The harness and its preconditions connect the two
+    \item Read the code and identify a suspicious function
+    \item Identify inputs that should vary during analysis
+    \item Inspect callers and propose assumptions about valid inputs
+    \item Submit a structured candidate to the verification tool
   \end{points}
-  \note{[1:00; cumulative 2:30] A candidate is a suspicion, not a confirmed report. A harness is a small program that sets up the function and its inputs for analysis. The hard interface is deciding what the caller can supply and which conditions are valid. Avoid claiming that LLMs can never produce test inputs; the methodological point is that their claims need independent execution evidence.}
+  \vspace{3mm}
+  \centering\input{figures/llm-role}
+  \takeaway{The LLM supplies a hypothesis and context; execution must check it}
+  \note{[1:00; cumulative 3:45] Introduce the responsibilities before naming the integration protocol. The LLM narrows the analysis to a candidate function, identifies its variable inputs, and looks at how other code calls it. It may infer assumptions incorrectly. In the running schematic example, the function processes records and a caller appears to pass at most four. This is an illustrative example, not an extra benchmark result.}
 \end{frame}
 
-% 04 | 02:30--03:30
-\begin{frame}{Symbolic execution in one minute}
+% 05 | 03:45--05:15
+\begin{frame}{Symbolic execution checks possible executions}
   \begin{columns}[c,onlytextwidth]
-    \column{0.45\textwidth}
+    \column{0.46\textwidth}
     \begin{points}
-      \item Inputs represent sets of values
-      \item Branches accumulate constraints
-      \item A solver checks feasible paths
-      \item An error path can yield a concrete witness
+      \item Use variables instead of one fixed test input
+      \item Follow branches and collect their conditions
+      \item Solve those conditions to find possible paths
+      \item If a path fails, obtain a concrete input that reaches it
     \end{points}
-    \column{0.51\textwidth}
+    \column{0.50\textwidth}
     \centering\input{figures/symbolic-tree}
   \end{columns}
-  \takeaway{Every result depends on the harness and the execution model}
-  \note{[1:00; cumulative 3:30] Use the tree to explain that KLEE does not merely try a few random examples: it tracks constraints on paths. A witness instantiates a feasible error path. Explain the cost: the path tree can grow rapidly, and library or environment behavior may be incompletely modeled. Keep the discussion conceptual; no live demo is needed.}
+  \takeaway{KLEE is the symbolic execution engine used in our system}
+  \note{[1:30; cumulative 5:15] Contrast an ordinary test, which picks one input, with symbolic execution, which reasons about sets of inputs using constraints. The schematic branch distinguishes processing at most four records from processing more. At a branch, KLEE explores each feasible alternative. The solver determines whether the conditions along a path can hold together. A feasible error path yields a concrete witness. This does not mean enumerating every integer separately. Many branches and loop iterations can still create a large number of execution states.}
 \end{frame}
 
-% 05 | 03:30--04:30
-\begin{frame}{The klee-mcp architecture}
+% 06 | 05:15--06:15
+\begin{frame}{The bridge: a small program KLEE can execute}
+  \centering\input{figures/harness-bridge}
+  \vspace{3mm}
+  \begin{points}
+    \item A \textbf{harness} sets up inputs and calls the selected function
+    \item The server turns declared inputs into symbolic variables
+    \item Assumptions restrict those variables before the call
+    \item The harness and target code are compiled to LLVM bitcode
+  \end{points}
+  \note{[1:00; cumulative 6:15] A language-model explanation is not directly executable. The structured candidate is translated into a small driver program: the harness. It allocates input objects, makes selected values symbolic, adds the declared assumptions, and calls the function. LLVM bitcode is the compiled representation KLEE executes. Library bitcode can be linked to include functions called by the target. Selecting one entry avoids starting analysis at every function in the repository; it does not mean only that one function's body executes.}
+\end{frame}
+
+% 07 | 06:15--07:30
+\begin{frame}{How the LLM and KLEE work together}
   \centering\input{figures/pipeline}
-  \vspace{5mm}
+  \vspace{3mm}
   \begin{points}
-    \item The LLM proposes the candidate and caller assumptions
-    \item The server translates the specification into an analysis harness
-    \item KLEE supplies the execution evidence
+    \item \textbf{LLM}: choose the candidate, inputs, and assumptions
+    \item \textbf{MCP server}: generate the harness and manage KLEE runs
+    \item \textbf{KLEE}: return a verdict and execution evidence
+    \item \textbf{LLM}: explain the result and investigate caller context
   \end{points}
-  \note{[1:00; cumulative 4:30] Expand MCP as Model Context Protocol. Here it is the structured interface between the tool-using LLM and a stateless server around KLEE. Our implementation uses a Claude Code orchestrator; our contribution is the interface and contract discipline. Whole-library LLVM bitcode can be linked behind the harness. The diagram is a conceptual summary, not a deployment or invocation recipe.}
+  \note{[1:15; cumulative 7:30] MCP means Model Context Protocol: it is the tool interface, not the analysis engine. Walk through the arrows in order. The LLM submits structured data; the server builds the driver and runs KLEE; the result returns through the server to the LLM. The LLM can then request a reachability check or explain the finding. The server can also perform the optional retry discussed shortly. The loop separates proposing an input model from checking behavior within that model.}
 \end{frame}
 
-% 06 | 04:30--06:00
-\begin{frame}{A candidate is an explicit specification}
-  \centering\input{figures/candidate}
-  \vspace{2mm}
-  \begin{points}
-    \item Make the LLM's assumptions visible and reviewable
-    \item Separate the suspected weakness from its input model
-  \end{points}
-  \note{[1:30; cumulative 6:00] Walk down the four rows. The function and weakness class identify the claim. Input declarations identify what the analysis varies. The contract records what callers are assumed to guarantee. The run policy states the budget and whether a second analysis may retract bounds. The important change is committing to a structured specification before running the engine, rather than hiding assumptions in an opaque generated harness.}
-\end{frame}
-
-% 07 | 06:00--07:00
-\begin{frame}{Reading the verdict}
+% 08 | 07:30--08:30
+\begin{frame}{What the verdicts mean}
   \renewcommand{\arraystretch}{1.6}
-  \begin{tabular}{@{}p{31mm}p{101mm}@{}}
-    \textbf{Confirmed} & A matching error exists in the analyzed model\\
-    \textbf{Infeasible} & No matching error on the fully explored modeled paths\\
-    \textbf{Unresolved} & Timeout, build failure, or engine error prevents a conclusion\\
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{29mm}>{\raggedright\arraybackslash}p{103mm}@{}}
+    \textbf{Confirmed} & A matching error was found; a concrete input demonstrates it\\
+    \textbf{Infeasible} & No matching error exists in the fully explored input model\\
+    \textbf{Unresolved} & The run timed out, failed to build, or hit an engine error\\
   \end{tabular}
   \vspace{4mm}
   \begin{points}
-    \item Check assumptions, completed paths, and engine limitations
-    \item A local witness alone does not establish deployment impact
+    \item \textbf{Confirmed}: check whether real callers can supply that input
+    \item \textbf{Infeasible}: ask which inputs the assumptions excluded
   \end{points}
-  \note{[1:00; cumulative 7:00] The server has five literal statuses: confirmed, infeasible, timeout, build\_failed, and klee\_error. Unresolved groups the last three only for this slide. Infeasibility is conditional on sound modeling and completed exploration; a returned status alone is insufficient. Our longjmp examples later show why. Matching error matters: the runner filters unrelated aborts and engine warnings.}
+  \note{[1:00; cumulative 8:30] Unresolved groups the literal statuses timeout, build\_failed, and klee\_error. A timeout is not a safety result. Infeasible requires completed exploration and a suitable model of the environment; unsupported behavior can weaken that interpretation. Most importantly, both confirmed and infeasible apply to the setup we supplied. Introduce the next question: what exactly did we assume about callers?}
 \end{frame}
 
-% 08 | 07:00--08:30
-\begin{frame}{Bounds encode a caller contract}
+% 09 | 08:30--10:15
+\begin{frame}{A caller contract is a promise about inputs}
   \centering\input{figures/contracts}
   \vspace{3mm}
   \begin{points}
-    \item Bounds select which inputs the analysis considers possible
-    \item A safe result inside that set says nothing about excluded inputs
+    \item \textbf{Caller}: the code that invokes the function
+    \item \textbf{Contract}: ``I will pass at most four records''
+    \item The LLM represents that promise as the bound $0 \leq n \leq 4$
   \end{points}
-  \takeaway{Review bounds as part of the claim being verified}
-  \note{[1:30; cumulative 8:30] Spend time on this slide: it is the central insight. The outer rectangle is the input space represented by the harness, not every possible real-world execution. The green ellipse is a caller contract, for example that a size argument correctly describes an allocated object. A function can be safe inside the contract and fail outside it. Neither result is contradictory. The diagram is schematic and does not represent measured coverage.}
+  \takeaway{An assumption in the harness does not add a check to the real function}
+  \note{[1:45; cumulative 10:15] Use this one schematic example consistently. The harness provides storage for 16 records; n says how many the function should process. Today's callers use at most four. The LLM proposes n between zero and four as a description of that usage. KLEE therefore checks that usage, not every other way of calling the function. A caller contract can come from documentation or caller code. It may be a real requirement or an incorrect inference. Adding an assumption to the harness does not change the library or enforce the promise at runtime.}
 \end{frame}
 
-% 09 | 08:30--10:00
-\begin{frame}{Retracting a questionable assumption}
-  \centering\input{figures/relax}
-  \vspace{3mm}
+% 10 | 10:15--11:30
+\begin{frame}{Bounds remove paths from the search}
+  \centering\input{figures/pruning}
+  \vspace{2mm}
   \begin{points}
-    \item Retain the initial verdict and record the relaxed retry
-    \item A changed verdict exposes sensitivity to the assumption
-    \item Review whether the relaxed inputs are possible for real callers
+    \item Paths requiring $n>4$ conflict with the bound and are discarded
+    \item In a loop over $n$ records, at most four iterations are needed
+    \item Fewer execution states usually mean less solver work and memory
   \end{points}
-  \note{[1:30; cumulative 10:00] Describe the deliberately wrong toy bound qualitatively. The first run excludes the error path; the optional retry retracts the bound and finds the error. Explain the scope carefully: automatic relaxation can reveal a bad assumption, but does not prove the relaxed input is realistic. The retry may also time out. Removing declared bounds still leaves the harness, allocation sizes, and engine model in place.}
+  \takeaway{Less exploration also means a narrower safety claim}
+  \note{[1:15; cumulative 11:30] Explain the dashed subtree: under n at most four, no input can satisfy the n greater than four branch, so KLEE need not explore its descendants. For a loop that runs once per record, the same bound also caps iterations. This can reduce state growth and solver effort. It is not a guarantee that every bounded run is faster; the remaining paths can still be difficult. KLEE is pruning infeasible symbolic paths, not simply skipping arbitrary source files or testing only four concrete examples. The tree is schematic, not a measured path count.}
 \end{frame}
 
-% 10 | 10:00--11:00
+% 11 | 11:30--13:00
+\begin{frame}{Why retry: what if the function is used differently?}
+  \centering\input{figures/relax}
+  \vspace{2mm}
+  \begin{points}
+    \item The LLM may have inferred a bound that is too restrictive
+    \item A new caller or refactor may pass more records, such as $n=8$
+    \item Retry without the LLM bounds to check excluded behavior
+  \end{points}
+  \takeaway{A new error can reveal a fragile assumption, even if today's usage is safe}
+  \note{[1:30; cumulative 13:00] A completed bounded run may show no error for today's usage. That leaves a second question: is the function robust if a future caller uses it differently? In our schematic example, eight records still fit in the 16-record object, but the execution was excluded by the four-record bound. The optional server retry removes the LLM bounds after an infeasible verdict; it still uses the harness and engine model. It may find an error, complete without one, or remain unresolved. Preserve both verdicts and the changed assumptions. An error outside the current contract does not imply a current reachable vulnerability: we must decide whether to enforce the contract, strengthen the function, or revise the assumption. The implementation retracts the declared LLM bounds; it does not prove which particular bound caused a changed result.}
+\end{frame}
+
+% 12 | 13:00--13:45
 \begin{frame}{Proof-of-concept evaluation}
   \begin{columns}[c,onlytextwidth]
     \column{0.34\textwidth}
@@ -165,10 +202,10 @@
     \item KLEE 3.1; LLVM/Clang 13; STP + MiniSat
     \item Whole-library target: 2.2 MB bitcode, 30 translation units
   \end{points}
-  \note{[1:00; cumulative 11:00] The benchmark checks whether the components behave as intended on selected examples. It is not an independent corpus of naturally occurring reports. Several candidates are variants of the same program. The 14 rows do not include the separate historical CVE experiment. Do not imply that linking a whole library means all library behavior was explored.}
+  \note{[0:45; cumulative 13:45] The benchmark checks whether the components behave as intended on selected examples. It is not an independent corpus of naturally occurring reports. Several candidates are variants of the same program. The 14 rows do not include the separate historical CVE experiment. Do not imply that linking a whole library means all library behavior was explored.}
 \end{frame}
 
-% 11 | 11:00--12:30
+% 13 | 13:45--14:45
 \begin{frame}{All 14 rows match their expected verdict}
   \begin{columns}[c,onlytextwidth]
     \column{0.65\textwidth}
@@ -184,10 +221,10 @@
   \begin{points}
     \item External precision, recall, and analyst time savings remain unmeasured
   \end{points}
-  \note{[1:30; cumulative 12:30] Explain colors: dark is confirmed, teal is infeasible under the model, not universal safety. The expected verdict is specified in each hand-constructed case. This is a descriptive result, not 100 percent precision. Use the table as the numerical source: its rows contain nine confirmed and five infeasible results, despite the prose stating seven and seven. The table range is 0.9 to 42.9 seconds; the slide deliberately avoids the inconsistent prose median.}
+  \note{[1:00; cumulative 14:45] Our 14 selected cases all returned their expected verdict: nine confirmed and five infeasible under their respective models. The expected outcome was specified for each case. Several rows are variants of the same program. This checks that the components work together as intended; external precision and recall require a larger independent evaluation.}
 \end{frame}
 
-% 12 | 12:30--13:30
+% 14 | 14:45--15:45
 \begin{frame}{Bounds can make exploration finish}
   \centering\input{figures/baseline}
   \vspace{1mm}
@@ -195,11 +232,11 @@
     \item Same libpng parser and harness; with and without a semantic bound
     \item The terminating result applies only under the added contract
   \end{points}
-  \note{[1:00; cumulative 13:30] We compare the same parser and harness with and without the semantic bound. Without the semantic bound the run reached its 60-second cap with partial paths. With the bound it completed its modeled paths in 30.9 seconds. Do not call this a general speedup: the input domain changed, and one run did not finish. The 60-second baseline run and the 9.4-second unbounded sensitivity case are separate experiments.}
+  \note{[1:00; cumulative 15:45] We compare the same parser and harness with and without the semantic bound. Without the semantic bound the run reached its 60-second cap with partial paths. With the bound it completed its modeled paths in 30.9 seconds. Do not call this a general speedup: the input domain changed, and one run did not finish. The 60-second baseline run and the 9.4-second unbounded sensitivity case are separate experiments.}
 \end{frame}
 
-% 13 | 13:30--15:00
-\begin{frame}{A historical CVE illustrates the contract}
+% 15 | 15:45--17:00
+\begin{frame}{The same function can be safe under its contract}
   \begin{points}
     \item CVE-2015-8540 case study: an internal libpng helper
     \item Function-level analysis reports an error across three versions
@@ -211,67 +248,49 @@
     \node[good,text width=42mm] (b) at (7.2,0) {\textbf{Contract supplied}\\No error in explored model};
     \draw[arrow] (a) -- node[above,font=\footnotesize,align=center]{Change the\\precondition} (b);
   \end{tikzpicture}
-  \takeaway{Caller-side fixes can leave the helper's precondition essential}
-  \note{[1:30; cumulative 15:00] Introduce our historical CVE case study. The extracted helper was studied in libpng 1.2.56, 1.6.19, and 1.6.47. The historical fix was in callers. Observing a local error when bypassing their contract therefore does not establish a newly reachable vulnerability in the later library. Keep the presentation at the evidence and contract level; the scientific conclusion does not need a byte-level trigger.}
+  \takeaway{Fixing the caller can make normal usage safe while the helper still trusts it}
+  \note{[1:15; cumulative 17:00] Introduce our historical CVE case study. The extracted helper was studied in libpng 1.2.56, 1.6.19, and 1.6.47. The historical fix was in callers. Observing a local error when bypassing their contract therefore does not establish a newly reachable vulnerability in the later library. Keep the presentation at the evidence and contract level; the scientific conclusion does not need a byte-level trigger.}
 \end{frame}
 
-% 14 | 15:00--16:00
-\begin{frame}{Reachability changes the interpretation}
+% 16 | 17:00--18:00
+\begin{frame}{Can today's callers reach the error?}
   \centering\input{figures/reachability}
   \vspace{3mm}
   \begin{points}
     \item \texttt{png\_format\_number}: an unchecked internal precondition
     \item Shipped callers satisfy the precondition at every reviewed call site
-    \item Result: a defense-in-depth finding, with no internal error reachability
+    \item Hardening opportunity: guard the precondition against future misuse
   \end{points}
-  \note{[1:00; cumulative 16:00] Distinguish this finding from the historical CVE case. We inspected the library call sites: they satisfy the helper's contract. The local error is relevant to defensive hardening but does not establish a remote vulnerability. The reachability tool probes entry-to-function reachability; merely reaching the target function does not prove the error state is reachable under the same calling context. Automated severity labels still need human review.}
+  \note{[1:00; cumulative 18:00] Distinguish this finding from the historical CVE case. We inspected the library call sites: they satisfy the helper's contract. The local error is relevant to defensive hardening but does not establish a remote vulnerability. The reachability tool probes entry-to-function reachability; merely reaching the target function does not prove the error state is reachable under the same calling context. Automated severity labels still need human review.}
 \end{frame}
 
-% 15 | 16:00--17:30
-\begin{frame}{Where the evidence stops}
+% 17 | 18:00--19:00
+\begin{frame}{Conclusion: the LLM guides, KLEE checks}
+  \centering\input{figures/conclusion}
+  \vspace{3mm}
   \begin{points}
-    \item \textbf{Evaluation scope}: a small, selected benchmark; no external tool comparison
-    \item \textbf{Model limits}: parser paths and \texttt{setjmp}/\texttt{longjmp} can limit exploration
-    \item \textbf{Caller validity}: relaxing bounds does not establish a realistic execution
-    \item \textbf{Impact}: heuristic labels and CVSS prefills need human assessment
+    \item Focus analysis on a candidate and the way it is called
+    \item Use bounds to make that analysis tractable
+    \item Retry to reveal behavior hidden by the assumptions
+  \end{points}
+  \takeaway{Report the verdict together with the assumptions that made it possible}
+  \note{[1:00; cumulative 19:00] Return to the complete system. The LLM contributes source context and a candidate; the server translates that into an executable check; KLEE supplies evidence. Bounds reduce the search to the intended usage. The optional retry tests how much the result depends on those bounds. Our proof of concept validates the workflow on 14 selected cases. The result is useful because it explains both the finding and its scope. Checking a real caller and assessing impact remain part of deciding what to report.}
+\end{frame}
+
+% 18 | 19:00--20:00
+\begin{frame}{Would you report it now?}
+  \begin{points}
+    \item \textbf{Evidence}: can an execution demonstrate the error?
+    \item \textbf{Assumptions}: for which inputs was the function checked?
+    \item \textbf{Usage}: can a current or future caller violate those assumptions?
   \end{points}
   \vspace{4mm}
-  \begin{tikzpicture}
-    \draw[arrow] (0,0) -- (11.3,0);
-    \foreach \x/\t in {0/Candidate,3.6/Local evidence,7.3/Caller context,11.3/Impact}{
-      \fill[teal] (\x,0) circle (2pt);
-      \node[above=3mm,font=\small] at (\x,0) {\t};
-    }
-  \end{tikzpicture}
-  \note{[1:30; cumulative 17:30] The evaluation demonstrates a method, not a count of externally acknowledged new vulnerabilities. We had received no maintainer feedback at submission time. The libjpeg case completed only one path because of engine limitations; a superficially reassuring status would be misleading without context. Automatic classification is a triage hint rather than proof of exploitability. The next evaluation should use externally labeled cases, controlled baselines, and realistic caller models.}
-\end{frame}
-
-% 16 | 17:30--18:30
-\begin{frame}{What this work contributes}
-  \begin{points}
-    \item \textbf{Explicit candidate schema}\\A checkable claim with declared inputs and preconditions
-    \item \textbf{Retractable bounds}\\A second analysis exposes assumption-sensitive verdicts
-    \item \textbf{Evidence for human review}\\Execution results, caller context, and reporting artifacts
-  \end{points}
-  \vspace{3mm}
-  \takeaway{The LLM proposes the model; KLEE checks behavior within it}
-  \note{[1:00; cumulative 18:30] Position our contribution relative to existing work. Other systems generate harnesses or place an LLM inside a symbolic or concolic engine. Here the LLM remains outside KLEE and commits to a candidate specification. The distinguishing methodological contribution is explicit, retractable preconditions together with reviewable evidence. Do not claim that combining an LLM and symbolic execution is itself new.}
-\end{frame}
-
-% 17 | 18:30--20:00 (1:30, including closing pause)
-\begin{frame}{Before you report the next AI-found bug}
-  \begin{points}
-    \item Ask for the execution evidence
-    \item Ask which assumptions made the verdict possible
-    \item Ask whether real callers can reach the error
-  \end{points}
-  \vspace{5mm}
-  {\Large\bfseries A verdict needs a contract.\par}
-  \vspace{3mm}
+  {\Large\bfseries Check the finding. Explain its scope.\par}
+  \vspace{4mm}
   {\large\color{teal}Questions?\par}
   \vspace{4mm}
   \href{https://github.com/FHNW-Security-Lab/klee-mcp}{\footnotesize github.com/FHNW-Security-Lab/klee-mcp}
-  \note{[1:30; cumulative 20:00] Return to the opening question: would you report the AI's finding now? The answer depends on evidence, the contract, and caller context. Summarize the 14-case proof of concept with its limited scope. End on the sentence 'A verdict needs a contract.' Leave a short pause, then invite questions. This 20-minute slot includes the closing pause but excludes extended Q and A; backup slides follow.}
+  \note{[1:00; cumulative 20:00] Return to the opening question and the maintainer workload illustrated by curl. We now have a concrete process for moving from a plausible claim to execution evidence and a review of caller assumptions. A finding under relaxed assumptions may justify hardening rather than a vulnerability report about current usage. Close with the project link and invite questions. Extended Q and A is additional to the 20-minute talk.}
 \end{frame}
 
 \appendix
@@ -323,6 +342,18 @@
     \item Read path statistics and unsupported behavior with the verdict
   \end{points}
   \note{Backup. libxml2 used 9.4 MB of bitcode across 106 translation units. That run executed 523 thousand LLVM instructions. This establishes that a second library can be analyzed end to end under the harness; it does not establish general safety. The libjpeg result is a useful example of how engine model limitations can dominate the outcome.}
+\end{frame}
+
+\begin{frame}{Backup: limitations and next steps}
+  \begin{points}
+    \item \textbf{Small benchmark}: evaluate an independent set of real findings
+    \item \textbf{Engine limits}: improve handling of complex parser error paths
+    \item \textbf{Caller assumptions}: validate them against realistic entry points
+    \item \textbf{Impact assessment}: review automated labels before reporting
+  \end{points}
+  \vspace{4mm}
+  \takeaway{A local failure is one step toward a useful security report}
+  \note{Backup. These are the limits of the current evidence and the next research steps. A completed analysis depends on a suitable model of library behavior. Some setjmp/longjmp paths limit exploration. The classifier is a triage aid, not proof of an exploit. Our selected benchmark cannot establish external precision, recall, or saved analyst time. We had received no maintainer feedback at submission time.}
 \end{frame}
 
 \begin{frame}{Backup: further reading}

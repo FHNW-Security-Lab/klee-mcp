@@ -1,8 +1,8 @@
 \begin{tikzpicture}
-  \node[focus] (input) at (0,2.8) {Symbolic input $x$};
-  \node[box] (branch) at (0,1.4) {Branch condition};
-  \node[good,text width=24mm] (left) at (-2,0) {Path A\\$P_A(x)$};
-  \node[bad,text width=24mm] (right) at (2,0) {Path B\\$P_B(x)$};
+  \node[focus] (input) at (0,2.8) {Record count $n$};
+  \node[box,minimum width=28mm] (branch) at (0,1.4) {$n\leq4$?};
+  \node[good,text width=24mm] (left) at (-2,0) {Short path\\$n\leq4$};
+  \node[box,text width=24mm] (right) at (2,0) {Longer path\\$n>4$};
   \draw[arrow] (input) -- (branch);
   \draw[arrow] (branch) -- node[left=2mm,font=\footnotesize]{true} (left);
   \draw[arrow] (branch) -- node[right=2mm,font=\footnotesize]{false} (right);

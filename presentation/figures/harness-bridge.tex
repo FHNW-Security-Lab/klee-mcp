@@ -1,0 +1,7 @@
+\begin{tikzpicture}
+  \node[box,text width=34mm,minimum height=22mm] (claim) at (0,0) {\textbf{LLM candidate}\\Check this function\\Records + count $n$\\Assume $0\leq n\leq4$};
+  \node[focus,text width=41mm,minimum height=22mm] (harness) at (5,0) {\textbf{Generated harness}\\Allocate record storage\\Make inputs symbolic\\Assume bound; call target};
+  \node[good,text width=26mm,minimum height=22mm] (klee) at (9.8,0) {\textbf{KLEE}\\Execute harness\\+ target code};
+  \draw[arrow] (claim) -- node[above,font=\scriptsize]{build} (harness);
+  \draw[arrow] (harness) -- node[above,font=\scriptsize]{compile} (klee);
+\end{tikzpicture}

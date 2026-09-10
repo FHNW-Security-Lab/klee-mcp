@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+  \node[box,text width=30mm,minimum height=17mm] (llm) at (0,0) {\textbf{LLM}\\Candidate\\+ assumptions};
+  \node[focus,text width=35mm,minimum height=17mm] (server) at (4.65,0) {\textbf{MCP server}\\Harness\\+ retry policy};
+  \node[good,text width=30mm,minimum height=17mm] (klee) at (9.3,0) {\textbf{KLEE}\\Checked verdict\\+ concrete evidence};
+  \draw[arrow] (llm) -- (server);
+  \draw[arrow] (server) -- (klee);
+  \draw[arrow,teal] (klee.south) -- ++(0,-0.7) -| (llm.south);
+  \node[font=\footnotesize,text=teal,fill=white,inner sep=2pt] at (4.65,-1.85) {Explain the result and review actual callers};
+\end{tikzpicture}

@@ -1,0 +1,7 @@
+\begin{tikzpicture}
+  \node[box,text width=29mm] (code) at (0,0) {Function code\\+ its callers};
+  \node[focus,text width=27mm] (llm) at (4.25,0) {\textbf{LLM}\\Reasons about usage};
+  \node[good,text width=36mm] (candidate) at (8.85,0) {\textbf{Candidate}\\Function + inputs\\+ assumptions};
+  \draw[arrow] (code) -- (llm);
+  \draw[arrow] (llm) -- (candidate);
+\end{tikzpicture}

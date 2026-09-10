@@ -1,10 +1,6 @@
 \begin{tikzpicture}
-  \node[box,text width=27mm] (bounded) at (0,0) {Run with\\LLM assumptions};
-  \node[good,text width=27mm] (initial) at (4.2,0) {\textbf{Infeasible}\\under this contract};
-  \node[focus,text width=27mm] (retry) at (8.4,0) {Optional retry\\without those bounds};
-  \draw[arrow] (bounded) -- (initial);
-  \draw[arrow] (initial) -- (retry);
-  \node[bad,text width=27mm] (witness) at (8.4,-1.7) {\textbf{Confirmed}\\relaxed inputs};
-  \draw[arrow] (retry) -- (witness);
-  \node[anchor=west,text width=57mm,align=left] at (-1.5,-1.7) {\textbf{Toy sensitivity case}\\\footnotesize A too-tight bound hid the error path.\\The retry exposed it.};
+  \node[good,text width=39mm,minimum height=18mm] (current) at (0,0) {\textbf{Check today's usage}\\$0\leq n\leq4$\\Verdict: infeasible};
+  \node[focus,text width=39mm,minimum height=18mm] (retry) at (6.8,0) {\textbf{Check broader usage}\\Remove LLM bounds\\Explore excluded paths};
+  \draw[arrow] (current) -- node[above,font=\footnotesize]{optional retry} (retry);
+  \node[anchor=west,font=\footnotesize,text width=118mm,align=left] at (-2,-1.55) {\textbf{Possible results:} an error appears; no error is found after completion;\\or the larger search remains unresolved.};
 \end{tikzpicture}

@@ -2,7 +2,7 @@
 
 An English, 16:9 Beamer presentation of **Closing the Triage Loop:
 MCP-mediated KLEE Validation of LLM-Reported C/C++ Vulnerabilities**.
-The talk is planned for **20 minutes**, with 17 main slides and 3 backup
+The talk is planned for **20 minutes**, with 18 main slides and 4 backup
 slides. Extended questions are additional to the 20 minutes.
 
 - [Presentation PDF](klee-mcp-kes-presentation.pdf)
@@ -45,27 +45,40 @@ automatically and keeps intermediate files separate.
 
 | Slide | Topic | Time | Cumulative |
 |---|---|---:|---:|
-| 1 | Title and context | 0:30 | 0:30 |
-| 2 | Audience hook: would you report it? | 1:00 | 1:30 |
-| 3 | The triage gap | 1:00 | 2:30 |
-| 4 | Symbolic execution primer | 1:00 | 3:30 |
-| 5 | Architecture | 1:00 | 4:30 |
-| 6 | Candidate specification | 1:30 | 6:00 |
-| 7 | Verdict semantics | 1:00 | 7:00 |
-| 8 | Bounds as caller contracts | 1:30 | 8:30 |
-| 9 | Retracting assumptions | 1:30 | 10:00 |
-| 10 | Evaluation setup | 1:00 | 11:00 |
-| 11 | Benchmark results | 1:30 | 12:30 |
-| 12 | Within-KLEE baseline | 1:00 | 13:30 |
-| 13 | Historical CVE and contracts | 1:30 | 15:00 |
-| 14 | Caller reachability | 1:00 | 16:00 |
-| 15 | Limitations | 1:30 | 17:30 |
-| 16 | Contributions | 1:00 | 18:30 |
-| 17 | Return to the opening question | 1:30 | 20:00 |
+| 1 | Title and research question | 0:30 | 0:30 |
+| 2 | curl: verification costs maintainers time | 1:30 | 2:00 |
+| 3 | Clear problem and audience hook | 0:45 | 2:45 |
+| 4 | What the LLM does | 1:00 | 3:45 |
+| 5 | Symbolic execution primer | 1:30 | 5:15 |
+| 6 | Candidate-to-harness bridge | 1:00 | 6:15 |
+| 7 | Complete system and data flow | 1:15 | 7:30 |
+| 8 | Verdict meanings | 1:00 | 8:30 |
+| 9 | Caller contract: four-record example | 1:45 | 10:15 |
+| 10 | Why bounds reduce exploration | 1:15 | 11:30 |
+| 11 | Retry for different usage | 1:30 | 13:00 |
+| 12 | Evaluation setup | 0:45 | 13:45 |
+| 13 | Benchmark results | 1:00 | 14:45 |
+| 14 | Within-KLEE baseline | 1:00 | 15:45 |
+| 15 | Historical CVE and caller contract | 1:15 | 17:00 |
+| 16 | Current caller reachability | 1:00 | 18:00 |
+| 17 | Conclusion with system figure | 1:00 | 19:00 |
+| 18 | Return to the opening question | 1:00 | 20:00 |
 
-The opening invites a short show of hands. The closing includes a pause
+The opening uses curl as an external motivation, followed by a short show
+of hands about reporting an AI-generated finding. The closing includes a pause
 and invitation to questions. Backup slides contain the detailed benchmark,
-cross-library results, and source references. No live demo is required.
+cross-library results, limitations and next steps, and external references.
+No live demo is required.
+
+A schematic running example connects the explanations: a function processes
+records, its harness allocates 16 record slots, and current callers use at
+most four. The LLM proposes the bound `0 <= n <= 4`. The slides show how
+that excludes paths, limits a loop over `n`, and leaves a reason to retry
+without the LLM bounds when considering a different caller (for example,
+`n = 8`). This example is explanatory, not a new experimental result.
+The retry removes the declared LLM bounds; harness and engine limits remain.
+A relaxed run can reveal a hardening opportunity without establishing a
+reachable vulnerability in current usage.
 
 ## Style and figures
 
@@ -85,9 +98,9 @@ native TikZ, including the numerical charts; logo artwork is reused intact.
 
 ## Sources and interpretation
 
-All empirical statements come from `../paper/klee-mcp-kes.pdf`, checked
-against its LaTeX source. Source provenance is recorded here and in the speaker notes, without
-self-citations on the slides. The final backup slide lists foundational
+Experimental results for klee-mcp come from `../paper/klee-mcp-kes.pdf`, checked
+against its LaTeX source. Source provenance is recorded here, without
+self-citations or third-person descriptions of our work on the slides. The final backup slide lists foundational
 work by other authors. The diagrams are
 conceptual explanations, not measured coverage or deployment diagrams.
 The benchmark chart aggregates the 14 rows of **Table 2** into four groups.
@@ -114,3 +127,16 @@ context; automatic impact labels need review; and whole-library linking
 does not imply comprehensive coverage. It distinguishes the historical
 CVE case from the separate defense-in-depth internal-helper finding.
 The manuscript and analysis implementation are unchanged.
+
+## External opening example: curl
+
+The opening cites Daniel Stenberg's primary accounts:
+
+- [The end of the curl bug-bounty (26 January 2026)](https://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/).
+- [High-Quality Chaos (22 April 2026)](https://daniel.haxx.se/blog/2026/04/22/high-quality-chaos/).
+
+The sub-5% figure describes all security submissions in the stated period,
+not a measured false-positive rate for AI alone. April's update prevents
+presenting the earlier slop episode as the current situation. curl is a
+motivation example, not a target evaluated in this work. Checked 10 September
+2026. The conclusion about independent verification is our interpretation.

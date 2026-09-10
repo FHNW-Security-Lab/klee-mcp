@@ -1,10 +1,12 @@
 \begin{tikzpicture}
-  \draw[fill=pale,draw=ink!50] (0,0) rectangle (6,3.4);
-  \node[anchor=north west,font=\footnotesize] at (0.1,3.3) {Inputs represented by the harness};
-  \filldraw[fill=teal!12,draw=teal,thick] (2.2,1.45) ellipse (1.75 and 1.0);
-  \node[align=center,text=teal] at (2.2,1.45) {Caller contract $C$\\\footnotesize allowed inputs};
-  \node[circle,fill=red,inner sep=2.2pt] (error) at (5,1.8) {};
-  \node[below=2mm of error,align=center,font=\footnotesize,text=red] {Error\\outside $C$};
-  \node[anchor=west,text width=55mm,align=left] at (6.6,2.6) {$C(x)\;\land\;\mathrm{error}(x)$\\[2mm]\footnotesize The query includes\\the caller contract.};
-  \node[anchor=west,text width=55mm,align=left] at (6.6,0.95) {\textbf{Changing $C$ changes the claim}\\[2mm]\footnotesize An error outside $C$ does not refute safety inside $C$.};
+  \node[box,text width=36mm] (caller) at (0,0) {\textbf{Current caller}\\Sends 0--4 records};
+  \node[focus,text width=46mm] (helper) at (7.7,0) {\textbf{Function being checked}\\\texttt{process(records, n)}};
+  \draw[arrow] (caller) -- node[above,font=\small]{promises $n\leq4$} (helper);
+  \node[anchor=west,font=\footnotesize] at (-1.9,-1.1) {Harness storage: 16 records};
+  \foreach \i in {0,...,15}{
+    \pgfmathtruncatemacro{\shade}{\i<4 ? 1 : 0}
+    \ifnum\shade=1 \filldraw[fill=yellow,draw=ink!60] (-1.8+0.48*\i,-1.8) rectangle ++(0.43,0.43);
+    \else \filldraw[fill=pale,draw=ink!40] (-1.8+0.48*\i,-1.8) rectangle ++(0.43,0.43);\fi
+  }
+  \node[anchor=west,font=\footnotesize,text=teal,align=left] at (6.25,-1.6) {Current usage:\\at most the first four};
 \end{tikzpicture}
