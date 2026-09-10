@@ -57,7 +57,7 @@ automatically and keeps intermediate files separate.
 | 10 | Retry for different usage | 1:45 | 15:15 |
 | 11 | Test types and evaluation setup | 0:45 | 16:00 |
 | 12 | Benchmark results | 1:15 | 17:15 |
-| 13 | Within-KLEE baseline | 1:15 | 18:30 |
+| 13 | libpng check: timeout versus completion under an input bound | 1:15 | 18:30 |
 | 14 | Conclusion with system figure and opening question | 1:30 | 20:00 |
 
 The opening uses curl as an external motivation, followed by a short show

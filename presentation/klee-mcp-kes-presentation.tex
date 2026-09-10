@@ -212,14 +212,18 @@
 \end{frame}
 
 % 13 | 17:15--18:30
-\begin{frame}{Bounds can make exploration finish}
-  \centering\input{figures/baseline}
-  \vspace{1mm}
+\begin{frame}{With an input bound, this libpng check finishes}
   \begin{points}
-    \item Same libpng parser and harness; with and without a semantic bound
-    \item The terminating result applies only under the added contract
+    \item Same libpng number parser and harness; only the input bound changes
   \end{points}
-  \note{[1:15; cumulative 18:30] We compare the same parser and harness with and without the semantic bound. Without the semantic bound the run reached its 60-second cap with partial paths. With the bound it completed its modeled paths in 30.9 seconds. Do not call this a general speedup: the input domain changed, and one run did not finish. The 60-second baseline run and the 9.4-second unbounded sensitivity case are separate experiments.}
+  \vspace{3mm}
+  \centering\input{figures/baseline}
+  \vspace{2mm}
+  \begin{points}
+    \item Restricting \texttt{size} to at most four excludes part of the search
+  \end{points}
+  \takeaway{The completed check covers only inputs allowed by the bound}
+  \note{[1:15; cumulative 18:30] This is experimental evidence for the search reduction explained on the caller-contract slide. We compare the same libpng number parser and harness with and without the LLM-supplied upper bound size <= 4. Without it, the run reached its 60-second cap with 1700 partially completed paths, so the check remained unresolved. With it, KLEE completed all 1438 paths in the modeled input range in 30.9 seconds and found no matching error: infeasible under that bound. Finished means no paths in that model remained unchecked; it does not mean the entire library was verified or that other input sizes are safe. The bound changes the question by excluding inputs. This demonstrates completion for a smaller input domain, not a general speedup or a two-times-faster analysis of the same domain. The 60-second baseline run and the 9.4-second unbounded sensitivity case are separate experiments.}
 \end{frame}
 
 % 14 | 18:30--20:00

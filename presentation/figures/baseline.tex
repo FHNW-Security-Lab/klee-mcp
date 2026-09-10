@@ -1,13 +1,14 @@
-\begin{tikzpicture}[x=0.11cm,y=1cm]
-  \node[anchor=east,align=right] at (-2,1.6) {Without\\semantic bound};
-  \node[anchor=east,align=right] at (-2,0.2) {With\\semantic bound};
-  \fill[ink!75] (0,1.38) rectangle (60,1.82);
-  \fill[teal] (0,-0.02) rectangle (30.9,0.42);
-  \node[anchor=west,font=\footnotesize] at (61,1.6) {60 s: timeout};
-  \node[anchor=west,font=\footnotesize] at (31.9,0.2) {30.9 s: infeasible};
-  \node[anchor=west,font=\footnotesize,text=muted] at (0,0.97) {1,700 partially completed paths};
-  \node[anchor=west,font=\footnotesize,text=teal] at (0,-0.45) {1,438 completed paths; none partial};
-  \draw[ink!35] (0,-0.85) -- (60,-0.85);
-  \foreach \t in {0,15,30,45,60}{\draw[ink!35] (\t,-0.85) -- (\t,-0.93);\node[font=\scriptsize,below] at (\t,-0.93) {\t};}
-  \node[font=\footnotesize,text=muted] at (30,-1.5) {Wall time (seconds)};
+\begin{tikzpicture}
+  \node[box,text width=57mm,minimum height=33mm] at (0,0) {
+    \textbf{Without the input bound}\\[2mm]
+    {\Large\bfseries 60 seconds}\\[2mm]
+    Time limit reached\\
+    Paths still unchecked\\
+    \textbf{Verdict: unresolved}};
+  \node[good,text width=57mm,minimum height=33mm] at (6.8,0) {
+    \textbf{With $\mathtt{size}\leq4$}\\[2mm]
+    {\Large\bfseries 30.9 seconds}\\[2mm]
+    All modeled paths checked\\
+    No matching error found\\
+    \textbf{Verdict: infeasible}};
 \end{tikzpicture}
