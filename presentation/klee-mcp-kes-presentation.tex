@@ -176,19 +176,14 @@
 \end{frame}
 
 % 11 | 15:15--16:00
-\begin{frame}{Proof-of-concept evaluation}
-  \begin{columns}[c,onlytextwidth]
-    \column{0.34\textwidth}
-    {\fontsize{48}{52}\selectfont\bfseries 14\par}
-    {\large hand-constructed\\candidates\par}
-    \column{0.61\textwidth}
-    \begin{points}
-      \item Toy programs for selected weakness classes
-      \item Bounds and retry sensitivity cases
-      \item Extracted libpng functions
-      \item Whole-library libpng + zlib analysis
-    \end{points}
-  \end{columns}
+\begin{frame}{What we tested}
+  \begin{points}
+    \item \textbf{Small C programs}: buffer overflow, integer overflow,\\
+      null-pointer dereference, use-after-free, and a safe example
+    \item \textbf{Input bounds and retry}: check behavior under different assumptions
+    \item \textbf{Extracted libpng functions}: check individual helpers
+    \item \textbf{Linked libpng + zlib}: check functions with library code available
+  \end{points}
   \vspace{4mm}
   \begin{points}
     \item KLEE 3.1; LLVM/Clang 13; STP + MiniSat
@@ -198,7 +193,7 @@
 \end{frame}
 
 % 12 | 16:00--17:15
-\begin{frame}{All 14 rows match their expected verdict}
+\begin{frame}{All 14 tests returned the expected verdict}
   \begin{columns}[c,onlytextwidth]
     \column{0.65\textwidth}
     \centering\input{figures/benchmark}
@@ -206,7 +201,7 @@
     \begin{points}
       \item 9 confirmed
       \item 5 infeasible
-      \item 0.9--42.9 s per row
+      \item 0.9--42.9 s per test
     \end{points}
   \end{columns}
   \takeaway{Evidence of internal consistency on these selected cases}

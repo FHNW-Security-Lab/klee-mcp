@@ -55,7 +55,7 @@ automatically and keeps intermediate files separate.
 | 8 | Entry-point versus function-level analysis | 1:30 | 10:30 |
 | 9 | Caller contract, search reduction, and libpng examples | 3:00 | 13:30 |
 | 10 | Retry for different usage | 1:45 | 15:15 |
-| 11 | Evaluation setup | 0:45 | 16:00 |
+| 11 | Test types and evaluation setup | 0:45 | 16:00 |
 | 12 | Benchmark results | 1:15 | 17:15 |
 | 13 | Within-KLEE baseline | 1:15 | 18:30 |
 | 14 | Conclusion with system figure and opening question | 1:30 | 20:00 |

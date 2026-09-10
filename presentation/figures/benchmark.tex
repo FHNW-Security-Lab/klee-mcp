@@ -7,7 +7,7 @@
     \node[anchor=west,font=\small] at (\confirmed+\infeasible+0.12,\y) {\pgfmathparse{int(\confirmed+\infeasible)}\pgfmathresult};
   }
   \foreach \n in {0,...,5}{\node[font=\scriptsize,text=muted] at (\n,-0.65) {\n};}
-  \node[font=\footnotesize,text=muted] at (2.5,-1.12) {Number of candidates};
+  \node[font=\footnotesize,text=muted] at (2.5,-1.12) {Number of tests};
   \fill[ink] (-2,-1.9) rectangle (-1.72,-1.62);
   \node[anchor=west,font=\footnotesize] at (-1.6,-1.76) {Confirmed};
   \fill[teal!65] (1.8,-1.9) rectangle (2.08,-1.62);
