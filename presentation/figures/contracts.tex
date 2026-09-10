@@ -1,12 +1,5 @@
 \begin{tikzpicture}
-  \node[box,text width=36mm] (caller) at (0,0) {\textbf{Current caller}\\Sends 0--4 records};
-  \node[focus,text width=46mm] (helper) at (7.7,0) {\textbf{Function being checked}\\\texttt{process(records, n)}};
+  \node[good,text width=36mm] (caller) at (0,0) {\textbf{Current caller}\\Sends 0--4 records};
+  \node[focus,text width=46mm] (helper) at (7.7,0) {\textbf{Function trusts caller}\\\texttt{process(records, n)}};
   \draw[arrow] (caller) -- node[above,font=\small]{promises $n\leq4$} (helper);
-  \node[anchor=west,font=\footnotesize] at (-1.9,-1.1) {Harness storage: 16 records};
-  \foreach \i in {0,...,15}{
-    \pgfmathtruncatemacro{\shade}{\i<4 ? 1 : 0}
-    \ifnum\shade=1 \filldraw[fill=yellow,draw=ink!60] (-1.8+0.48*\i,-1.8) rectangle ++(0.43,0.43);
-    \else \filldraw[fill=pale,draw=ink!40] (-1.8+0.48*\i,-1.8) rectangle ++(0.43,0.43);\fi
-  }
-  \node[anchor=west,font=\footnotesize,text=teal,align=left] at (6.25,-1.6) {Current usage:\\at most the first four};
 \end{tikzpicture}
