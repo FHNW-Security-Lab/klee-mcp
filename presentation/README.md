@@ -2,7 +2,7 @@
 
 An English, 16:9 Beamer presentation of **Closing the Triage Loop:
 MCP-mediated KLEE Validation of LLM-Reported C/C++ Vulnerabilities**.
-The talk is planned for **20 minutes**, with 19 main slides and 4 backup
+The talk is planned for **20 minutes**, with 18 main slides and 4 backup
 slides. Extended questions are additional to the 20 minutes.
 
 - [Presentation PDF](klee-mcp-kes-presentation.pdf)
@@ -49,21 +49,20 @@ automatically and keeps intermediate files separate.
 | 2 | curl: verification costs maintainers time | 1:30 | 2:00 |
 | 3 | Clear problem and audience hook | 0:45 | 2:45 |
 | 4 | What the LLM does | 0:45 | 3:30 |
-| 5 | Symbolic execution primer | 1:15 | 4:45 |
-| 6 | Candidate-to-harness bridge | 1:00 | 5:45 |
-| 7 | Complete system and data flow | 1:15 | 7:00 |
-| 8 | Verdict meanings | 1:00 | 8:00 |
-| 9 | Entry-point versus function-level analysis | 1:00 | 9:00 |
-| 10 | Caller contract: four-record example | 1:30 | 10:30 |
-| 11 | Why bounds reduce exploration | 1:15 | 11:45 |
-| 12 | Retry for different usage | 1:30 | 13:15 |
-| 13 | Evaluation setup | 0:45 | 14:00 |
-| 14 | Benchmark results | 1:00 | 15:00 |
-| 15 | Within-KLEE baseline | 1:00 | 16:00 |
-| 16 | Historical CVE and caller contract | 1:15 | 17:15 |
-| 17 | Current caller reachability | 1:00 | 18:15 |
-| 18 | Conclusion with system figure | 1:00 | 19:15 |
-| 19 | Return to the opening question | 0:45 | 20:00 |
+| 5 | Symbolic execution primer | 1:30 | 5:00 |
+| 6 | Candidate-to-harness bridge | 1:00 | 6:00 |
+| 7 | Complete system and data flow | 1:15 | 7:15 |
+| 8 | Verdict meanings | 1:00 | 8:15 |
+| 9 | Entry-point versus function-level analysis | 1:15 | 9:30 |
+| 10 | Caller contract: four-record example | 2:00 | 11:30 |
+| 11 | Retry for different usage | 1:30 | 13:00 |
+| 12 | Evaluation setup | 0:45 | 13:45 |
+| 13 | Benchmark results | 1:00 | 14:45 |
+| 14 | Within-KLEE baseline | 1:00 | 15:45 |
+| 15 | Historical CVE and caller contract | 1:15 | 17:00 |
+| 16 | Current caller reachability | 1:00 | 18:00 |
+| 17 | Conclusion with system figure | 1:00 | 19:00 |
+| 18 | Return to the opening question | 1:00 | 20:00 |
 
 The opening uses curl as an external motivation, followed by a short show
 of hands about reporting an AI-generated finding. The closing includes a pause
@@ -80,8 +79,8 @@ context. A relaxed retry remains a function-level analysis.
 
 A schematic running example connects the explanations: a function processes
 records, its harness allocates 16 record slots, and current callers use at
-most four. The LLM proposes the bound `0 <= n <= 4`. The slides show how
-that excludes paths, limits a loop over `n`, and leaves a reason to retry
+most four. The LLM proposes the bound `0 <= n <= 4`. The caller-contract speaker notes explain how
+that excludes paths and limits a loop over `n`; the next slide explains the retry
 without the LLM bounds when considering a different caller (for example,
 `n = 8`). This example is explanatory, not a new experimental result.
 The retry removes the declared LLM bounds; harness and engine limits remain.
