@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+  \node[anchor=west,font=\footnotesize\bfseries,text=teal] at (-1.5,2.3) {START FROM AN APPLICATION / API ENTRY};
+  \node[box,text width=27mm] (entry) at (0,1.4) {Entry point};
+  \node[good,text width=31mm] (caller) at (4.35,1.4) {Parse + validate\\Accept only $n\leq4$};
+  \node[focus,text width=27mm] (target) at (8.7,1.4) {Target function};
+  \draw[arrow] (entry) -- (caller);
+  \draw[arrow] (caller) -- (target);
+  \node[anchor=west,font=\footnotesize\bfseries,text=teal] at (-1.5,0.15) {START DIRECTLY AT THE FUNCTION};
+  \node[box,text width=27mm] (harness) at (0,-0.75) {Direct harness\\Symbolic inputs};
+  \node[focus,text width=27mm] (direct) at (8.7,-0.75) {Same target};
+  \draw[arrow] (harness) -- node[above,font=\footnotesize]{Caller checks are bypassed} (direct);
+\end{tikzpicture}
